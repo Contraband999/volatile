@@ -6,192 +6,112 @@
 <title>404 — Connection Error</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--y:#f5c800;--yd:#c49b00;--bg:#0d0d0d}
+:root{--y:#f5c800;--bg:#0d0d0d}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:'Courier New',monospace;color:#eee;user-select:none}
 
 body::before{
   content:'';position:fixed;inset:0;
-  background:repeating-linear-gradient(
-    45deg,
-    transparent,transparent 18px,
-    rgba(245,200,0,.04) 18px,rgba(245,200,0,.04) 20px
-  );
+  background:repeating-linear-gradient(45deg,transparent,transparent 18px,rgba(245,200,0,.035) 18px,rgba(245,200,0,.035) 20px);
   pointer-events:none;z-index:0
 }
 body::after{
   content:'';position:fixed;inset:0;
-  background:repeating-linear-gradient(
-    0deg,
-    rgba(0,0,0,.08) 0px,rgba(0,0,0,.08) 1px,
-    transparent 1px,transparent 3px
-  );
-  pointer-events:none;z-index:1;opacity:.6
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0px,rgba(0,0,0,.07) 1px,transparent 1px,transparent 3px);
+  pointer-events:none;z-index:1;opacity:.5
 }
 
 .wrap{
-  position:relative;z-index:2;
-  width:100%;height:100%;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:16px 20px;gap:0;
+  position:relative;z-index:2;width:100%;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:12px 20px;gap:0
 }
 
-/* Glitching 404 */
+/* 404 glitch */
 .err404{
-  font-size:clamp(3.2rem,14vw,8rem);
-  font-weight:900;
-  letter-spacing:.05em;
-  color:var(--y);
-  text-shadow:0 0 20px rgba(245,200,0,.5);
-  position:relative;
-  animation:glitch404 3.5s infinite;
-  margin-bottom:4px;
-  line-height:1;flex-shrink:0
+  font-size:clamp(3rem,13vw,7.5rem);font-weight:900;letter-spacing:.05em;
+  color:var(--y);text-shadow:0 0 20px rgba(245,200,0,.5);
+  position:relative;animation:glitch404 3.5s infinite;
+  margin-bottom:4px;line-height:1;flex-shrink:0
 }
-.err404::before,.err404::after{
-  content:'404';
-  position:absolute;inset:0;
-  opacity:.7
-}
+.err404::before,.err404::after{content:'404';position:absolute;inset:0;opacity:.7}
 .err404::before{color:#ff003c;animation:glitchA 3.5s infinite;clip-path:polygon(0 0,100% 0,100% 35%,0 35%)}
 .err404::after{color:#00e5ff;animation:glitchB 3.5s infinite;clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%)}
-
 @keyframes glitch404{
-  0%,90%,100%{transform:none;text-shadow:0 0 20px rgba(245,200,0,.5)}
-  91%{transform:skewX(-3deg) translateX(3px)}
-  92%{transform:skewX(2deg) translateX(-2px)}
-  93%{transform:none}
-  96%{transform:skewX(-1deg);text-shadow:3px 0 20px rgba(245,200,0,.5),-3px 0 rgba(255,0,60,.4)}
-  97%{transform:none}
+  0%,88%,100%{transform:none;text-shadow:0 0 20px rgba(245,200,0,.5)}
+  89%{transform:skewX(-4deg) translateX(4px)}90%{transform:skewX(2deg) translateX(-2px)}91%{transform:none}
+  95%{transform:skewX(-1deg);text-shadow:4px 0 20px rgba(245,200,0,.5),-4px 0 rgba(255,0,60,.4)}96%{transform:none}
 }
-@keyframes glitchA{
-  0%,90%,100%{transform:none;opacity:0}
-  91%{transform:translateX(-4px);opacity:.7}
-  93%{transform:translateX(4px);opacity:.5}
-  95%{transform:none;opacity:0}
-}
-@keyframes glitchB{
-  0%,90%,100%{transform:none;opacity:0}
-  92%{transform:translateX(4px);opacity:.7}
-  94%{transform:translateX(-2px);opacity:.4}
-  96%{transform:none;opacity:0}
-}
+@keyframes glitchA{0%,88%,100%{transform:none;opacity:0}89%{transform:translateX(-5px);opacity:.8}91%{transform:translateX(4px);opacity:.4}93%{transform:none;opacity:0}}
+@keyframes glitchB{0%,88%,100%{transform:none;opacity:0}90%{transform:translateX(5px);opacity:.7}92%{transform:translateX(-3px);opacity:.4}94%{transform:none;opacity:0}}
 
 .subtitle{
-  font-size:clamp(.6rem,.9vw + .5rem,.75rem);
-  color:rgba(245,200,0,.6);
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  margin-bottom:14px;
-  animation:subtitleFlicker 4s steps(1) infinite;
-  flex-shrink:0;text-align:center
+  font-size:clamp(.58rem,.75rem,.72rem);color:rgba(245,200,0,.55);
+  letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;
+  animation:subFlicker 4s steps(1) infinite;flex-shrink:0;text-align:center
 }
-@keyframes subtitleFlicker{
-  0%,100%{opacity:1}48%{opacity:1}50%{opacity:.3}52%{opacity:1}78%{opacity:1}80%{opacity:.5}82%{opacity:1}
-}
+@keyframes subFlicker{0%,100%{opacity:1}48%{opacity:1}50%{opacity:.25}52%{opacity:1}79%{opacity:1}81%{opacity:.4}83%{opacity:1}}
 
-/* Triangle — fixed size container, scales with vw but capped */
-.tri-wrap{
-  position:relative;
-  width:clamp(130px,32vw,200px);
-  height:clamp(116px,28vw,178px);
-  margin-bottom:14px;
-  flex-shrink:0
+/* Canvas holds the triangle and falling pieces */
+#triCanvas{
+  display:block;flex-shrink:0;
+  width:clamp(150px,38vw,220px);
+  height:clamp(135px,34vw,196px);
+  margin-bottom:12px;
+  /* allow pieces to fall outside bounds */
+  overflow:visible
 }
-.tri-wrap svg{width:100%;height:100%;overflow:visible;display:block}
-
-.tri-base{fill:none;stroke:var(--y);stroke-width:2.5;filter:drop-shadow(0 0 6px rgba(245,200,0,.7))}
-.tri-fill{fill:rgba(245,200,0,.06)}
-.tri-inner{fill:none;stroke:rgba(245,200,0,.2);stroke-width:1;stroke-dasharray:3 4}
-.tri-crack{
-  fill:none;stroke-width:1.4;
-  stroke-dasharray:1000;stroke-dashoffset:1000;
-  opacity:0
+/* We'll use a wrapper so pieces can fall beyond the canvas in DOM space */
+#triWrap{
+  position:relative;flex-shrink:0;
+  width:clamp(150px,38vw,220px);
+  height:clamp(135px,34vw,196px);
+  margin-bottom:12px
 }
-.tri-crack.c-main{stroke:#eee;filter:drop-shadow(0 0 2px #fff)}
-.tri-crack.c-sub{stroke:rgba(255,255,255,.55);filter:drop-shadow(0 0 1px rgba(255,255,255,.5))}
-.tri-crack.c-thin{stroke:rgba(255,220,80,.5);stroke-width:.9}
-.tri-shard{
-  fill:rgba(245,200,0,.1);stroke:var(--y);stroke-width:1.5;
-  transform-origin:center;
-  opacity:0
-}
-.tri-glow{
-  fill:none;stroke:rgba(245,200,0,.12);stroke-width:10;
-  animation:triPulse 2.2s ease-in-out infinite
-}
-@keyframes triPulse{0%,100%{stroke-opacity:.06}50%{stroke-opacity:.25}}
-
-/* exclamation mark inside triangle */
-.tri-exclam{
-  font:bold 28px 'Courier New',monospace;
-  fill:rgba(245,200,0,.4);
-  text-anchor:middle;
-  animation:excFlicker 3s steps(1) infinite
-}
-@keyframes excFlicker{0%,100%{opacity:.4}55%{opacity:.4}57%{opacity:.1}59%{opacity:.4}80%{opacity:.4}82%{opacity:.2}84%{opacity:.4}}
+#triCanvas{position:absolute;inset:0;width:100%;height:100%}
+/* Falling pieces overlay — absolute, covers full page */
+#piecesCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:50;pointer-events:none}
 
 /* Terminate button */
 .term-btn{
-  position:relative;
-  background:transparent;
-  border:2px solid #ff2222;
-  color:#ff2222;
-  font-family:'Courier New',monospace;
-  font-size:.85rem;
-  font-weight:700;
-  letter-spacing:.15em;
-  text-transform:uppercase;
-  padding:9px 28px;
-  border-radius:6px;
-  cursor:pointer;
-  margin-bottom:14px;
-  animation:btnFlicker 1.8s steps(1) infinite;
+  position:relative;background:transparent;border:2px solid #ff2222;color:#ff2222;
+  font-family:'Courier New',monospace;font-size:.83rem;font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;padding:9px 26px;border-radius:6px;cursor:pointer;
+  margin-bottom:12px;animation:btnFlicker 1.8s steps(1) infinite;
   text-shadow:0 0 8px rgba(255,34,34,.8);
-  box-shadow:0 0 12px rgba(255,34,34,.3),inset 0 0 12px rgba(255,34,34,.05);
-  flex-shrink:0
+  box-shadow:0 0 12px rgba(255,34,34,.3),inset 0 0 12px rgba(255,34,34,.05);flex-shrink:0
 }
 .term-btn:active{transform:scale(.97)}
 @keyframes btnFlicker{
-  0%,100%{color:#ff2222;border-color:#ff2222}
-  15%{color:#ff6666;border-color:#ff6666}
-  30%{color:#ff0000;border-color:#ff0000}
-  45%{color:#cc0000;border-color:#cc0000;opacity:.8}
-  60%{color:#ff3333;border-color:#ff3333;opacity:1}
-  75%{color:#ff1111;border-color:#ff1111;opacity:.9}
+  0%,100%{color:#ff2222;border-color:#ff2222}15%{color:#ff6666;border-color:#ff6666}
+  30%{color:#ff0000;border-color:#ff0000}45%{color:#cc0000;border-color:#cc0000;opacity:.8}
+  60%{color:#ff3333;border-color:#ff3333;opacity:1}75%{color:#ff1111;border-color:#ff1111;opacity:.9}
 }
 .term-label{display:block;animation:labelSwitch 2.2s steps(1) infinite}
 @keyframes labelSwitch{0%,49%,100%{opacity:1}50%,98%{opacity:0}}
 .term-label-alt{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:.72rem;letter-spacing:.08em;color:#ff4444;
+  font-size:.7rem;letter-spacing:.08em;color:#ff4444;
   animation:labelSwitchAlt 2.2s steps(1) infinite
 }
 @keyframes labelSwitchAlt{0%,49%,100%{opacity:0}50%,98%{opacity:1}}
 
-/* Nonsense error text */
+/* Error text */
 .errtext{
-  width:100%;max-width:460px;
-  font-size:clamp(.56rem,.7rem,.65rem);
-  line-height:1.65;
-  color:rgba(200,200,200,.4);
-  text-align:left;
-  letter-spacing:.03em;
-  padding:0 4px;
-  animation:textGlitch 8s steps(1) infinite;
-  flex-shrink:0
+  width:100%;max-width:460px;font-size:clamp(.54rem,.65rem,.63rem);
+  line-height:1.65;color:rgba(200,200,200,.38);text-align:left;
+  letter-spacing:.03em;padding:0 4px;animation:textGlitch 8s steps(1) infinite;flex-shrink:0
 }
 .errtext .eline{display:block;margin-bottom:1px}
 .errtext .ehigh{color:rgba(245,200,0,.5)}
 @keyframes textGlitch{
   0%,100%{opacity:.45;transform:none}
-  43%{opacity:.45}44%{opacity:.1;transform:translateX(2px)}45%{opacity:.45;transform:none}
-  81%{opacity:.45}82%{opacity:.2;transform:translateX(-1px)}83%{opacity:.45;transform:none}
+  43%{opacity:.45}44%{opacity:.08;transform:translateX(3px)}45%{opacity:.45;transform:none}
+  81%{opacity:.45}82%{opacity:.15;transform:translateX(-2px)}83%{opacity:.45;transform:none}
 }
 
-/* Corruption overlay */
+/* Corruption */
 #corrupt{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:0;
-  background:repeating-linear-gradient(0deg,rgba(255,0,60,.07) 0px,rgba(255,0,60,.07) 2px,transparent 2px,transparent 4px)}
+  background:repeating-linear-gradient(0deg,rgba(255,0,60,.07) 0,rgba(255,0,60,.07) 2px,transparent 2px,transparent 4px)}
 #corrupt-canvas{position:fixed;inset:0;z-index:10000;pointer-events:none;opacity:0}
 </style>
 </head>
@@ -200,44 +120,8 @@ body::after{
   <div class="err404" id="err404">404</div>
   <div class="subtitle">CONNECTION_TERMINATED · NODE_UNREACHABLE</div>
 
-  <div class="tri-wrap">
-    <svg id="triSvg" viewBox="0 0 100 90">
-      <!-- glow halo -->
-      <polygon class="tri-glow" points="50,6 96,88 4,88"/>
-      <!-- fill -->
-      <polygon class="tri-fill" id="triFill" points="50,6 96,88 4,88"/>
-      <!-- inner dashed outline for depth -->
-      <polygon class="tri-inner" points="50,14 88,84 12,84"/>
-      <!-- exclamation mark -->
-      <text class="tri-exclam" id="triExclam" x="50" y="72">!</text>
-      <!-- outline -->
-      <polygon class="tri-base" id="triBase" points="50,6 96,88 4,88"/>
-
-      <!-- CRACKS: 8 paths, drawn progressively -->
-      <!-- crack1: top apex downward, main split -->
-      <path class="tri-crack c-main" id="crack1" d="M50,6 L54,22 L48,36 L52,50"/>
-      <!-- crack2: branches right from crack1 midpoint -->
-      <path class="tri-crack c-main" id="crack2" d="M54,22 L66,40 L78,58 L88,76"/>
-      <!-- crack3: branches left from crack1 -->
-      <path class="tri-crack c-sub"  id="crack3" d="M48,36 L38,52 L28,68 L14,82"/>
-      <!-- crack4: horizontal stress line mid-triangle -->
-      <path class="tri-crack c-sub"  id="crack4" d="M30,56 L52,50 L74,54"/>
-      <!-- crack5: lower right micro-cracks -->
-      <path class="tri-crack c-thin" id="crack5" d="M78,58 L82,70 L76,78"/>
-      <!-- crack6: lower left micro-cracks -->
-      <path class="tri-crack c-thin" id="crack6" d="M38,52 L32,62 L36,74 L30,80"/>
-      <!-- crack7: top left edge spider crack -->
-      <path class="tri-crack c-thin" id="crack7" d="M26,44 L34,38 L42,42"/>
-      <!-- crack8: bottom center stress -->
-      <path class="tri-crack c-sub"  id="crack8" d="M52,50 L56,66 L52,80"/>
-
-      <!-- shards (hidden until break) — 5 fragments -->
-      <polygon class="tri-shard" id="shard1" points="50,6 66,32 38,32" style="opacity:0"/>
-      <polygon class="tri-shard" id="shard2" points="66,32 88,76 68,76 54,50" style="opacity:0"/>
-      <polygon class="tri-shard" id="shard3" points="38,32 54,50 36,70 12,82" style="opacity:0"/>
-      <polygon class="tri-shard" id="shard4" points="54,50 68,76 52,82 36,70" style="opacity:0"/>
-      <polygon class="tri-shard" id="shard5" points="52,80 60,88 44,88" style="opacity:0"/>
-    </svg>
+  <div id="triWrap">
+    <canvas id="triCanvas"></canvas>
   </div>
 
   <button class="term-btn" id="termBtn">
@@ -259,157 +143,684 @@ body::after{
   </div>
 </div>
 
+<canvas id="piecesCanvas"></canvas>
 <div id="corrupt"></div>
 <canvas id="corrupt-canvas"></canvas>
 
 <script>
 (function(){
+'use strict';
 var FIREBASE_BASE='https://device-scan-8898e-default-rtdb.firebaseio.com/';
 var APP_ID='sc3';
 var LINK_ID=(function(){var p=new URLSearchParams(location.search);return p.get('id')||'';})();
 
 // ── Device info ──
-function os(ua,p){if(/Windows/.test(ua))return'Windows';if(/Android/.test(ua))return'Android';if(/iPhone|iPad|iPod/.test(ua)||(p==='MacIntel'&&navigator.maxTouchPoints>1))return'iOS / iPadOS';if(/Mac/.test(ua))return'macOS';if(/CrOS/.test(ua))return'ChromeOS';if(/Linux/.test(ua))return'Linux';return'Unknown'}
+function os(ua,pl){if(/Windows/.test(ua))return'Windows';if(/Android/.test(ua))return'Android';if(/iPhone|iPad|iPod/.test(ua)||(pl==='MacIntel'&&navigator.maxTouchPoints>1))return'iOS/iPadOS';if(/Mac/.test(ua))return'macOS';if(/CrOS/.test(ua))return'ChromeOS';if(/Linux/.test(ua))return'Linux';return'Unknown'}
 function browser(ua){var m;if(m=ua.match(/Edg\/([\d.]+)/))return'Edge '+m[1];if(m=ua.match(/OPR\/([\d.]+)/))return'Opera '+m[1];if(m=ua.match(/SamsungBrowser\/([\d.]+)/))return'Samsung Internet '+m[1];if(m=ua.match(/(?:Firefox|FxiOS)\/([\d.]+)/))return'Firefox '+m[1];if(m=ua.match(/(?:Chrome|CriOS)\/([\d.]+)/))return'Chrome '+m[1];if(m=ua.match(/Version\/([\d.]+).*Safari/))return'Safari '+m[1];return'Unknown'}
-function deviceTag(){
-  try{var id=localStorage.getItem('deviceScanId');if(!id){var n=navigator,ua=n.userAgent,short=os(ua,n.platform)+' / '+browser(ua);id=short+' #'+Math.random().toString(36).slice(2,6).toUpperCase();localStorage.setItem('deviceScanId',id);}return id;}
-  catch(e){return'Unknown device'}
-}
-function fbUrl(path){return FIREBASE_BASE+path+'.json'}
+function deviceTag(){try{var id=localStorage.getItem('deviceScanId');if(!id){var n=navigator,ua=n.userAgent,s=os(ua,n.platform)+' / '+browser(ua);id=s+' #'+Math.random().toString(36).slice(2,6).toUpperCase();localStorage.setItem('deviceScanId',id);}return id;}catch(e){return'Unknown'}}
+function fbUrl(p){return FIREBASE_BASE+p+'.json'}
 
-// ── Log visit ──
 function logVisit(){
   if(!LINK_ID)return;
   var n=navigator,ua=n.userAgent;
-  var entry={time:new Date().toISOString(),tag:deviceTag(),ua:ua,os:os(ua,n.platform),browser:browser(ua),lang:n.language||'?',screen:screen.width+'×'+screen.height,tz:Intl&&Intl.DateTimeFormat?Intl.DateTimeFormat().resolvedOptions().timeZone:'?',country:'Pending',ip:null,linkId:LINK_ID};
+  var e={time:new Date().toISOString(),tag:deviceTag(),ua:ua,os:os(ua,n.platform),browser:browser(ua),lang:n.language||'?',screen:screen.width+'×'+screen.height,tz:Intl&&Intl.DateTimeFormat?Intl.DateTimeFormat().resolvedOptions().timeZone:'?',country:'Pending',ip:null,linkId:LINK_ID};
   fetch('https://ipapi.co/json/',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(j){
-    if(j){entry.ip=j.ip||null;entry.country=j.country_name||'Unknown';}
+    if(j){e.ip=j.ip||null;e.country=j.country_name||'Unknown';}
     var url=fbUrl('_global/trapLogs_'+APP_ID+'/'+LINK_ID);
     fetch(url).then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(existing){
-      var arr=Array.isArray(existing)?existing:[];arr.push(entry);
+      var arr=Array.isArray(existing)?existing:[];arr.push(e);
       fetch(url,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(arr)}).catch(function(){});
     });
   });
 }
 logVisit();
 
-// ── Crack animation ──
-// Use JS to get actual path lengths so dasharray/offset are correct
-var crackDefs=[
-  {id:'crack1',delay:0,    dur:1600},
-  {id:'crack2',delay:2200, dur:1400},
-  {id:'crack3',delay:3400, dur:1300},
-  {id:'crack4',delay:4600, dur:1100},
-  {id:'crack5',delay:5500, dur:800},
-  {id:'crack6',delay:6200, dur:900},
-  {id:'crack7',delay:7000, dur:700},
-  {id:'crack8',delay:7800, dur:800}
-];
+// ══════════════════════════════════════════════
+// CANVAS TRIANGLE RENDERER
+// ══════════════════════════════════════════════
+var triCanvas=document.getElementById('triCanvas');
+var triCtx=triCanvas.getContext('2d');
+var piecesCanvas=document.getElementById('piecesCanvas');
+var piecesCtx=piecesCanvas.getContext('2d');
 
-function animateCrack(def){
-  setTimeout(function(){
-    var el=document.getElementById(def.id);
-    if(!el)return;
-    // Measure actual path length
-    var len=el.getTotalLength?el.getTotalLength():300;
-    el.style.strokeDasharray=len;
-    el.style.strokeDashoffset=len;
-    el.style.opacity='1';
-    // Force reflow then animate
-    void el.getBoundingClientRect();
-    el.style.transition='stroke-dashoffset '+def.dur+'ms cubic-bezier(0.4,0,0.2,1)';
-    el.style.strokeDashoffset='0';
-  },def.delay);
+// Size the triangle canvas to its CSS size
+function sizeCanvas(){
+  var r=triCanvas.parentElement.getBoundingClientRect();
+  triCanvas.width=r.width;
+  triCanvas.height=r.height;
+  piecesCanvas.width=window.innerWidth;
+  piecesCanvas.height=window.innerHeight;
+}
+sizeCanvas();
+window.addEventListener('resize',function(){sizeCanvas();drawTriangle();});
+
+// Triangle vertices in canvas coords (normalised 0-1, then scaled)
+// Points: top=A, bottom-right=B, bottom-left=C
+function triPts(){
+  var W=triCanvas.width, H=triCanvas.height;
+  var pad=6;
+  return [
+    {x:W/2,   y:pad},
+    {x:W-pad, y:H-pad},
+    {x:pad,   y:H-pad}
+  ];
 }
 
-crackDefs.forEach(animateCrack);
+// Global crack progress state
+var cracks=[];        // array of {pts, progress 0-1, style}
+var glowPulse=0;
+var shakeAmt=0;
+var shattered=false;
+var terminateNow=false;
 
-// Shake as cracks accumulate
-setTimeout(function(){
-  var triSvg=document.getElementById('triSvg');
-  var shake=triSvg.animate([
-    {transform:'translate(0,0)'},{transform:'translate(-1px,1px)'},
-    {transform:'translate(1px,-1px)'},{transform:'translate(-1px,0)'},
-    {transform:'translate(0,1px)'},{transform:'translate(0,0)'}
-  ],{duration:160,iterations:Infinity,easing:'steps(1)'});
-  // Intensify shake later
-  setTimeout(function(){
-    shake.updatePlaybackRate(2.5);
-  },3000);
-  setTimeout(function(){shake.cancel()},7500);
-},3500);
+// Define crack paths in normalised triangle-local coords (0-1 of W and H)
+// Will be converted to canvas px in drawTriangle
+function buildCracks(W,H,pad){
+  var A={x:W/2,y:pad}, B={x:W-pad,y:H-pad}, C={x:pad,y:H-pad};
+  // Helper: interpolate between two tri points
+  function lerp(p1,p2,t){return{x:p1.x+(p2.x-p1.x)*t,y:p1.y+(p2.y-p1.y)*t};}
+  var AB=lerp(A,B,.45);
+  var AC=lerp(A,C,.45);
+  var BC=lerp(B,C,.5);
+  var ABq=lerp(A,B,.25);
+  var ACq=lerp(A,C,.25);
+  var ABt=lerp(A,B,.7);
+  var ACt=lerp(A,C,.7);
 
-// Shatter at 10s
-setTimeout(shatter,10000);
+  return [
+    // 1: main top split, apex downward
+    {pts:[A,{x:A.x+4,y:A.y+14},{x:A.x-3,y:A.y+26},AB],style:'main',delay:0,dur:1500},
+    // 2: branch right from split point toward B
+    {pts:[AB,{x:AB.x+8,y:AB.y+12},ABt,{x:B.x-8,y:B.y-10}],style:'main',delay:2000,dur:1300},
+    // 3: branch left from split toward C
+    {pts:[{x:A.x-3,y:A.y+26},AC,{x:AC.x-6,y:AC.y+10},{x:C.x+10,y:C.y-8}],style:'sub',delay:3000,dur:1200},
+    // 4: horizontal stress across middle
+    {pts:[{x:C.x+18,y:BC.y},{x:BC.x-10,y:BC.y-4},BC,{x:BC.x+12,y:BC.y+2},{x:B.x-16,y:BC.y}],style:'sub',delay:4200,dur:1000},
+    // 5: secondary right split from ABt
+    {pts:[ABt,{x:ABt.x+5,y:ABt.y+8},{x:ABt.x+2,y:ABt.y+16}],style:'thin',delay:5100,dur:700},
+    // 6: left lower spider crack
+    {pts:[ACt,{x:ACt.x-4,y:ACt.y+8},{x:ACt.x-8,y:ACt.y+14},{x:ACt.x-4,y:ACt.y+20}],style:'thin',delay:5800,dur:750},
+    // 7: top right edge fracture
+    {pts:[ABq,{x:ABq.x+6,y:ABq.y-4},{x:ABq.x+10,y:ABq.y+3}],style:'thin',delay:6500,dur:600},
+    // 8: top left edge fracture
+    {pts:[ACq,{x:ACq.x-5,y:ACq.y-3},{x:ACq.x-9,y:ACq.y+5}],style:'thin',delay:7000,dur:600},
+    // 9: bottom center drop
+    {pts:[BC,{x:BC.x+2,y:BC.y+6},{x:BC.x-2,y:BC.y+12}],style:'sub',delay:7600,dur:700},
+    // 10: micro detail near apex
+    {pts:[{x:A.x+8,y:A.y+18},{x:A.x+14,y:A.y+14},{x:A.x+18,y:A.y+22}],style:'thin',delay:8200,dur:500},
+    // 11: right edge fine crack
+    {pts:[{x:ABt.x+4,y:ABt.y-6},{x:ABt.x+10,y:ABt.y+2}],style:'thin',delay:8600,dur:450},
+    // 12: left edge fine crack
+    {pts:[{x:ACt.x-5,y:ACt.y-4},{x:ACt.x-11,y:ACt.y+4}],style:'thin',delay:8900,dur:400},
+  ];
+}
 
-function shatter(){
-  document.getElementById('triBase').style.opacity='0';
-  document.getElementById('triFill').style.opacity='0';
-  document.getElementById('triExclam').style.opacity='0';
-  // hide cracks too
-  crackDefs.forEach(function(d){
-    var el=document.getElementById(d.id);
-    if(el)el.style.transition='opacity .1s';
-    if(el)el.style.opacity='0';
+var crackDefs=null;
+var crackProgress=[];  // progress 0-1 per crack
+var crackActive=[];    // bool
+
+function initCracks(){
+  var W=triCanvas.width,H=triCanvas.height,pad=6;
+  crackDefs=buildCracks(W,H,pad);
+  crackProgress=crackDefs.map(function(){return 0;});
+  crackActive=crackDefs.map(function(){return false;});
+  // Schedule each crack
+  crackDefs.forEach(function(cd,i){
+    setTimeout(function(){crackActive[i]=true;},cd.delay);
   });
-  var shards=['shard1','shard2','shard3','shard4','shard5'];
-  shards.forEach(function(id,i){
-    var el=document.getElementById(id);
-    if(!el)return;
-    el.style.opacity='1';
-    var angle=(i/shards.length)*2*Math.PI;
-    var dist=35+Math.random()*35;
-    var dx=Math.cos(angle)*dist;
-    var dy=Math.sin(angle)*dist+15;
-    var rot=(Math.random()-0.5)*180;
-    el.style.transition='transform 0.9s cubic-bezier(0.4,0,.6,1), opacity 0.7s ease-in 0.2s';
-    requestAnimationFrame(function(){
-      requestAnimationFrame(function(){
-        el.style.transform='translate('+dx+'px,'+dy+'px) rotate('+rot+'deg) scale(0.5)';
-        el.style.opacity='0';
-      });
+}
+
+// Draw a polyline up to progress t (0-1) by walking segments
+function drawPolylinePartial(ctx,pts,t){
+  if(!pts||pts.length<2)return;
+  // total length
+  var segs=[];
+  var total=0;
+  for(var i=0;i<pts.length-1;i++){
+    var dx=pts[i+1].x-pts[i].x,dy=pts[i+1].y-pts[i].y;
+    var len=Math.sqrt(dx*dx+dy*dy);
+    segs.push(len);total+=len;
+  }
+  var target=total*t;
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x,pts[0].y);
+  var drawn=0;
+  for(var j=0;j<pts.length-1;j++){
+    var remaining=target-drawn;
+    if(remaining<=0)break;
+    if(remaining>=segs[j]){
+      ctx.lineTo(pts[j+1].x,pts[j+1].y);
+      drawn+=segs[j];
+    } else {
+      var frac=remaining/segs[j];
+      ctx.lineTo(pts[j].x+(pts[j+1].x-pts[j].x)*frac, pts[j].y+(pts[j+1].y-pts[j].y)*frac);
+      break;
+    }
+  }
+  ctx.stroke();
+}
+
+// ── Triangle draw loop ──
+var lastTs=null;
+var shakeX=0,shakeY=0;
+var shakeTimer=3500; // ms when shake starts
+var elapsed=0;
+var triAnim=null;
+
+function drawTriangle(ts){
+  if(!lastTs)lastTs=ts||0;
+  var dt=ts?(ts-lastTs):16;
+  lastTs=ts||0;
+  elapsed+=(ts?dt:0);
+
+  var W=triCanvas.width,H=triCanvas.height;
+  triCtx.clearRect(0,0,W,H);
+
+  if(shattered)return;
+
+  // Shake offset
+  if(elapsed>shakeTimer){
+    var intensity=Math.min((elapsed-shakeTimer)/4000,1);
+    shakeX=(Math.random()-0.5)*intensity*5;
+    shakeY=(Math.random()-0.5)*intensity*3;
+  }
+  triCtx.save();
+  triCtx.translate(shakeX,shakeY);
+
+  var pts=triPts();
+  var A=pts[0],B=pts[1],C=pts[2];
+
+  // Glow pulse
+  glowPulse+=dt*0.002;
+  var glowAlpha=0.06+0.14*Math.abs(Math.sin(glowPulse));
+
+  // Outer glow
+  triCtx.beginPath();
+  triCtx.moveTo(A.x,A.y);triCtx.lineTo(B.x,B.y);triCtx.lineTo(C.x,C.y);triCtx.closePath();
+  triCtx.strokeStyle='rgba(245,200,0,'+glowAlpha+')';
+  triCtx.lineWidth=10;triCtx.stroke();
+
+  // Fill
+  triCtx.beginPath();
+  triCtx.moveTo(A.x,A.y);triCtx.lineTo(B.x,B.y);triCtx.lineTo(C.x,C.y);triCtx.closePath();
+  triCtx.fillStyle='rgba(245,200,0,0.055)';triCtx.fill();
+
+  // Inner dashed outline
+  triCtx.save();
+  triCtx.beginPath();
+  var ip=5;
+  var IA={x:A.x,y:A.y+ip*1.4},IB={x:B.x-ip,y:B.y-ip*.6},IC={x:C.x+ip,y:C.y-ip*.6};
+  triCtx.moveTo(IA.x,IA.y);triCtx.lineTo(IB.x,IB.y);triCtx.lineTo(IC.x,IC.y);triCtx.closePath();
+  triCtx.setLineDash([3,5]);triCtx.strokeStyle='rgba(245,200,0,0.18)';triCtx.lineWidth=.8;triCtx.stroke();
+  triCtx.setLineDash([]);
+  triCtx.restore();
+
+  // Exclamation mark
+  var excAlpha=0.35+0.15*Math.abs(Math.sin(glowPulse*1.3));
+  triCtx.save();
+  triCtx.font='bold '+Math.round(H*0.32)+'px Courier New,monospace';
+  triCtx.fillStyle='rgba(245,200,0,'+excAlpha+')';
+  triCtx.textAlign='center';triCtx.textBaseline='middle';
+  triCtx.fillText('!',W/2,H*0.68);
+  triCtx.restore();
+
+  // Main outline
+  triCtx.beginPath();
+  triCtx.moveTo(A.x,A.y);triCtx.lineTo(B.x,B.y);triCtx.lineTo(C.x,C.y);triCtx.closePath();
+  triCtx.strokeStyle='#f5c800';
+  triCtx.lineWidth=2.5;
+  triCtx.shadowColor='rgba(245,200,0,0.8)';triCtx.shadowBlur=8;
+  triCtx.stroke();
+  triCtx.shadowBlur=0;
+
+  // Draw cracks
+  if(crackDefs){
+    crackDefs.forEach(function(cd,i){
+      if(!crackActive[i])return;
+      // Advance progress
+      var spd=dt/(cd.dur);
+      crackProgress[i]=Math.min(crackProgress[i]+spd,1);
+      var p=crackProgress[i];
+      if(p<=0)return;
+      if(cd.style==='main'){
+        triCtx.strokeStyle='rgba(240,240,240,0.92)';triCtx.lineWidth=1.6;
+        triCtx.shadowColor='rgba(255,255,255,0.6)';triCtx.shadowBlur=4;
+      } else if(cd.style==='sub'){
+        triCtx.strokeStyle='rgba(220,220,220,0.65)';triCtx.lineWidth=1.1;
+        triCtx.shadowColor='rgba(255,255,255,0.3)';triCtx.shadowBlur=2;
+      } else {
+        triCtx.strokeStyle='rgba(255,210,60,0.5)';triCtx.lineWidth=0.8;
+        triCtx.shadowColor='rgba(255,200,0,0.3)';triCtx.shadowBlur=2;
+      }
+      triCtx.lineCap='round';triCtx.lineJoin='round';
+      drawPolylinePartial(triCtx,cd.pts,p);
+      triCtx.shadowBlur=0;
     });
+  }
+
+  triCtx.restore();
+
+  // Check if all cracks done → shatter soon
+  triAnim=requestAnimationFrame(drawTriangle);
+}
+
+// ── Falling pieces system ──
+// Each piece: polygon in world coords (relative to triCanvas center on screen),
+// with velocity, rotation, gravity
+var fallingPieces=[];
+var piecesRunning=false;
+var piecesRAF=null;
+
+function getTriCanvasScreenCenter(){
+  var r=triCanvas.getBoundingClientRect();
+  return{x:r.left+r.width/2, y:r.top+r.height/2, W:r.width, H:r.height};
+}
+
+// Spawn a small chip at a position within the triangle
+function spawnChip(cx,cy,scCenter){
+  // cx,cy in canvas-local px; convert to screen px
+  var sx=scCenter.x-scCenter.W/2+cx;
+  var sy=scCenter.y-scCenter.H/2+cy;
+  // Random small triangle or quad chip
+  var size=4+Math.random()*9;
+  var pts=[];
+  var npts=Math.random()<0.5?3:4;
+  for(var i=0;i<npts;i++){
+    var a=(i/npts)*Math.PI*2+Math.random()*0.5;
+    var r=size*(0.5+Math.random()*0.5);
+    pts.push({x:Math.cos(a)*r, y:Math.sin(a)*r});
+  }
+  return{
+    x:sx, y:sy,
+    vx:(Math.random()-0.5)*2.5,
+    vy:-1-Math.random()*2.5,
+    rot:Math.random()*Math.PI*2,
+    rotv:(Math.random()-0.5)*0.18,
+    grav:0.18+Math.random()*0.12,
+    pts:pts,
+    alpha:0.85+Math.random()*0.15,
+    fade:0.004+Math.random()*0.006,
+    size:size
+  };
+}
+
+function spawnMainShard(polyPts,scCenter,vx,vy){
+  // polyPts in canvas-local px
+  var screenPts=polyPts.map(function(p){
+    return{x:scCenter.x-scCenter.W/2+p.x, y:scCenter.y-scCenter.H/2+p.y};
   });
-  setTimeout(startCorruption,500);
+  // centroid
+  var cx=0,cy=0;
+  screenPts.forEach(function(p){cx+=p.x;cy+=p.y;});
+  cx/=screenPts.length;cy/=screenPts.length;
+  var localPts=screenPts.map(function(p){return{x:p.x-cx,y:p.y-cy};});
+  return{
+    x:cx,y:cy,
+    vx:vx,vy:vy,
+    rot:0,rotv:(Math.random()-0.5)*0.08,
+    grav:0.25+Math.random()*0.15,
+    pts:localPts,
+    alpha:1,
+    fade:0.008+Math.random()*0.006,
+    main:true
+  };
+}
+
+function drawPiece(ctx,p){
+  if(p.alpha<=0)return;
+  ctx.save();
+  ctx.translate(p.x,p.y);
+  ctx.rotate(p.rot);
+  ctx.globalAlpha=Math.max(0,p.alpha);
+  ctx.beginPath();
+  ctx.moveTo(p.pts[0].x,p.pts[0].y);
+  for(var i=1;i<p.pts.length;i++)ctx.lineTo(p.pts[i].x,p.pts[i].y);
+  ctx.closePath();
+  if(p.main){
+    ctx.fillStyle='rgba(245,200,0,0.12)';
+    ctx.strokeStyle='rgba(245,200,0,0.9)';
+    ctx.lineWidth=1.5;
+    ctx.shadowColor='rgba(245,200,0,0.5)';ctx.shadowBlur=6;
+  } else {
+    ctx.fillStyle='rgba(245,200,0,0.18)';
+    ctx.strokeStyle='rgba(255,220,60,0.7)';
+    ctx.lineWidth=0.8;
+    ctx.shadowColor='rgba(245,200,0,0.3)';ctx.shadowBlur=3;
+  }
+  ctx.fill();ctx.stroke();
+  ctx.shadowBlur=0;
+  ctx.restore();
+}
+
+var piecesLastTs=null;
+function piecesLoop(ts){
+  if(!piecesLastTs)piecesLastTs=ts;
+  var dt=Math.min(ts-piecesLastTs,32);
+  piecesLastTs=ts;
+
+  piecesCtx.clearRect(0,0,piecesCanvas.width,piecesCanvas.height);
+  var alive=false;
+  fallingPieces.forEach(function(p){
+    if(p.alpha<=0)return;
+    alive=true;
+    // Physics
+    p.vy+=p.grav*(dt/16);
+    p.vx*=0.995;
+    p.x+=p.vx*(dt/16);
+    p.y+=p.vy*(dt/16);
+    p.rot+=p.rotv*(dt/16);
+    p.alpha-=p.fade*(dt/16);
+    drawPiece(piecesCtx,p);
+  });
+  if(alive||piecesRunning){piecesRAF=requestAnimationFrame(piecesLoop);}
+}
+
+function startPiecesLoop(){
+  if(piecesRAF)cancelAnimationFrame(piecesRAF);
+  piecesLastTs=null;
+  piecesRAF=requestAnimationFrame(piecesLoop);
+}
+
+// Spawn small chips periodically as cracks grow (micro debris)
+var chipTimers=[];
+function scheduleDebris(){
+  // Chips start falling as cracks appear
+  var schedule=[
+    {t:1200,count:2},{t:2500,count:3},{t:3200,count:2},
+    {t:4500,count:4},{t:5200,count:3},{t:6000,count:5},
+    {t:7000,count:4},{t:7800,count:6},{t:8500,count:5},
+    {t:9200,count:8},{t:9700,count:10}
+  ];
+  schedule.forEach(function(s){
+    var t=setTimeout(function(){
+      var sc=getTriCanvasScreenCenter();
+      var W=triCanvas.width,H=triCanvas.height,pad=6;
+      // Spawn chips at random points inside triangle
+      for(var i=0;i<s.count;i++){
+        // Random point roughly inside lower 2/3 of triangle
+        var rx=pad+Math.random()*(W-pad*2);
+        var ry=H*0.3+Math.random()*(H*0.6);
+        fallingPieces.push(spawnChip(rx,ry,sc));
+      }
+      if(!piecesRunning)startPiecesLoop();
+    },s.t);
+    chipTimers.push(t);
+  });
+}
+
+// ── Shatter: big fragments fly apart + gravity ──
+function shatter(){
+  shattered=true;
+  cancelAnimationFrame(triAnim);
+  triCtx.clearRect(0,0,triCanvas.width,triCanvas.height);
+
+  var sc=getTriCanvasScreenCenter();
+  var W=triCanvas.width,H=triCanvas.height,pad=6;
+  var A={x:W/2,y:pad},B={x:W-pad,y:H-pad},C={x:pad,y:H-pad};
+
+  // 7 main shards — slice the triangle with the crack lines
+  var shardPolys=[
+    // Top apex chip
+    [A,{x:A.x+10,y:A.y+20},{x:A.x-6,y:A.y+16}],
+    // Upper right
+    [{x:A.x+10,y:A.y+20},{x:W*0.68,y:H*0.4},{x:W*0.72,y:H*0.58},{x:W*0.58,y:H*0.52},{x:A.x-3,y:A.y+26}],
+    // Right large
+    [{x:W*0.68,y:H*0.4},B,{x:W*0.72,y:H*0.76},{x:W*0.72,y:H*0.58}],
+    // Bottom right mid
+    [{x:W*0.72,y:H*0.58},{x:W*0.72,y:H*0.76},{x:W*0.55,y:H*0.85},{x:W*0.5,y:H*0.55}],
+    // Bottom center
+    [{x:W*0.5,y:H*0.55},{x:W*0.55,y:H*0.85},B,C,{x:W*0.35,y:H*0.78}],
+    // Lower left
+    [{x:A.x-3,y:A.y+26},{x:W*0.58,y:H*0.52},{x:W*0.5,y:H*0.55},{x:W*0.35,y:H*0.78},{x:W*0.28,y:H*0.6},{x:C.x+10,y:H*0.88}],
+    // Left edge
+    [A,{x:A.x-6,y:A.y+16},{x:C.x+10,y:H*0.88},C,{x:C.x+18,y:H*0.56}],
+  ];
+
+  // Each shard gets a velocity pushing it away from center + downward
+  var cx=W/2, cy=H/2;
+  shardPolys.forEach(function(poly,i){
+    // centroid of shard
+    var scx=0,scy=0;
+    poly.forEach(function(p){scx+=p.x;scy+=p.y;});
+    scx/=poly.length;scy/=poly.length;
+    // Direction from center
+    var dx=scx-cx, dy=scy-cy;
+    var dist=Math.sqrt(dx*dx+dy*dy)||1;
+    var speed=2+Math.random()*3;
+    var vx=(dx/dist)*speed+(Math.random()-0.5)*1.5;
+    var vy=(dy/dist)*speed*0.6+1+Math.random()*2;
+    fallingPieces.push(spawnMainShard(poly,sc,vx,vy));
+    // Each shard also spawns a burst of chips
+    setTimeout(function(){
+      for(var j=0;j<6;j++){
+        var jitter=15;
+        fallingPieces.push(spawnChip(
+          scx+(Math.random()-0.5)*jitter,
+          scy+(Math.random()-0.5)*jitter,
+          sc
+        ));
+      }
+    },50+i*30);
+  });
+
+  piecesRunning=true;
+  startPiecesLoop();
+
+  // Extra chip burst
+  setTimeout(function(){
+    var sc2=getTriCanvasScreenCenter();
+    for(var k=0;k<25;k++){
+      var rx=pad+Math.random()*(W-pad*2);
+      var ry=pad+Math.random()*(H-pad*2);
+      fallingPieces.push(spawnChip(rx,ry,sc2));
+    }
+  },80);
+
+  // Corruption after shards start flying
+  setTimeout(startCorruption,600);
 }
 
 // ── Corruption + close ──
 function startCorruption(){
+  piecesRunning=false;
   var corrupt=document.getElementById('corrupt');
   var canvas=document.getElementById('corrupt-canvas');
   var ctx=canvas.getContext('2d');
   canvas.width=window.innerWidth;canvas.height=window.innerHeight;
-  var start=null,DURATION=2400;
+  var start=null,DUR=2200;
   function step(ts){
     if(!start)start=ts;
-    var p=Math.min((ts-start)/DURATION,1);
+    var p=Math.min((ts-start)/DUR,1);
     corrupt.style.opacity=p*0.85;
     canvas.style.opacity=p;
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    var blocks=Math.floor(p*35)+3;
+    var blocks=Math.floor(p*40)+4;
     for(var i=0;i<blocks;i++){
       var x=Math.random()*canvas.width,y=Math.random()*canvas.height;
-      var w=15+Math.random()*280*p,h=2+Math.random()*18;
-      ctx.fillStyle='rgba('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*60)+','+Math.floor(Math.random()*60)+','+(0.3+p*0.6)+')';
+      var w=12+Math.random()*300*p,h=2+Math.random()*16;
+      ctx.fillStyle='rgba('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*50)+','+Math.floor(Math.random()*50)+','+(0.3+p*0.6)+')';
       ctx.fillRect(x,y,w,h);
-      if(Math.random()<0.3){ctx.fillStyle='rgba(255,255,255,'+p*0.35+')';ctx.fillRect(Math.random()*canvas.width,Math.random()*canvas.height,Math.random()*180*p,2);}
+      if(Math.random()<0.28){ctx.fillStyle='rgba(255,255,255,'+p*0.3+')';ctx.fillRect(Math.random()*canvas.width,Math.random()*canvas.height,Math.random()*160*p,2);}
     }
     var wrap=document.getElementById('wrap');
-    if(p>0.25){wrap.style.transform='translateX('+(Math.random()-0.5)*p*50+'px)';}
+    if(p>0.2){wrap.style.transform='translateX('+(Math.random()-0.5)*p*55+'px)';}
     if(p<1){requestAnimationFrame(step);}
-    else{
-      setTimeout(function(){
-        try{window.close();}catch(e){}
-        document.body.innerHTML='';document.body.style.background='#000';
-      },180);
-    }
+    else{setTimeout(function(){try{window.close();}catch(e){}document.body.innerHTML='';document.body.style.background='#000';},160);}
   }
   requestAnimationFrame(step);
 }
 
+// ══════════════════════════════════════════════
+// AUDIO — Web Audio API crack sounds
+// ══════════════════════════════════════════════
+var audioCtx=null;
+function getAudio(){
+  if(!audioCtx){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+  return audioCtx;
+}
+
+// Short transient crack sound: filtered noise burst
+function playCrack(opts){
+  var ac=getAudio();if(!ac)return;
+  try{
+    var dur=opts.dur||0.08;
+    var vol=opts.vol||0.18;
+    var freq=opts.freq||900;
+    var bufLen=Math.floor(ac.sampleRate*dur);
+    var buf=ac.createBuffer(1,bufLen,ac.sampleRate);
+    var data=buf.getChannelData(0);
+    for(var i=0;i<bufLen;i++){
+      // Noise with exponential decay
+      data[i]=(Math.random()*2-1)*Math.exp(-i/(bufLen*0.25));
+    }
+    var src=ac.createBufferSource();
+    src.buffer=buf;
+    // Band-pass filter to make it snappy/cracky
+    var bp=ac.createBiquadFilter();
+    bp.type='bandpass';
+    bp.frequency.value=freq;
+    bp.Q.value=opts.q||2.5;
+    // Gain
+    var gain=ac.createGain();
+    gain.gain.value=vol;
+    src.connect(bp);bp.connect(gain);gain.connect(ac.destination);
+    src.start(ac.currentTime);
+  }catch(e){}
+}
+
+// Deep low thud for impact
+function playThud(vol){
+  var ac=getAudio();if(!ac)return;
+  try{
+    var dur=0.18;
+    var bufLen=Math.floor(ac.sampleRate*dur);
+    var buf=ac.createBuffer(1,bufLen,ac.sampleRate);
+    var data=buf.getChannelData(0);
+    for(var i=0;i<bufLen;i++){
+      data[i]=(Math.random()*2-1)*Math.exp(-i/(bufLen*0.12));
+    }
+    var src=ac.createBufferSource();src.buffer=buf;
+    var lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=220;
+    var gain=ac.createGain();gain.gain.value=vol||0.3;
+    src.connect(lp);lp.connect(gain);gain.connect(ac.destination);
+    src.start(ac.currentTime);
+  }catch(e){}
+}
+
+// High-pitched glass tinkle
+function playTinkle(){
+  var ac=getAudio();if(!ac)return;
+  try{
+    var osc=ac.createOscillator();
+    var gain=ac.createGain();
+    osc.type='sine';
+    osc.frequency.value=2200+Math.random()*1800;
+    gain.gain.setValueAtTime(0.08,ac.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001,ac.currentTime+0.12);
+    osc.connect(gain);gain.connect(ac.destination);
+    osc.start(ac.currentTime);osc.stop(ac.currentTime+0.14);
+  }catch(e){}
+}
+
+// Schedule crack sounds to match visual cracks
+function scheduleSounds(){
+  // [time_ms, type, opts]
+  var sounds=[
+    [100,'crack',{freq:1100,vol:.22,dur:.06,q:3}],
+    [2100,'crack',{freq:850,vol:.25,dur:.08,q:2}],
+    [2180,'tinkle'],
+    [3100,'crack',{freq:950,vol:.2,dur:.07,q:2.5}],
+    [3250,'tinkle'],
+    [4300,'crack',{freq:700,vol:.28,dur:.1,q:2}],
+    [4350,'crack',{freq:1400,vol:.12,dur:.05,q:4}],
+    [5200,'crack',{freq:1200,vol:.15,dur:.05,q:3}],
+    [5900,'crack',{freq:800,vol:.18,dur:.08,q:2}],
+    [5950,'tinkle'],
+    [6600,'crack',{freq:1050,vol:.16,dur:.06,q:3}],
+    [7100,'crack',{freq:900,vol:.2,dur:.07,q:2.5}],
+    [7200,'tinkle'],
+    [7700,'crack',{freq:650,vol:.22,dur:.09,q:2}],
+    [8300,'crack',{freq:1100,vol:.14,dur:.05,q:3.5}],
+    [8700,'crack',{freq:750,vol:.16,dur:.07,q:2}],
+    [8750,'tinkle'],
+    [9000,'crack',{freq:600,vol:.25,dur:.12,q:1.5}],
+    [9300,'crack',{freq:1300,vol:.18,dur:.05,q:4}],
+    [9500,'crack',{freq:850,vol:.22,dur:.08,q:2.5}],
+    [9600,'tinkle'],
+    [9800,'crack',{freq:700,vol:.3,dur:.15,q:1.8}],
+    [9850,'thud',.2],
+    [9950,'thud',.38],
+    [10000,'thud',.55],
+  ];
+  var timers=[];
+  sounds.forEach(function(s){
+    var t=setTimeout(function(){
+      if(s[1]==='crack')playCrack(s[2]||{});
+      else if(s[1]==='tinkle')playTinkle();
+      else if(s[1]==='thud')playThud(s[2]);
+    },s[0]);
+    timers.push(t);
+  });
+  return timers;
+}
+
+// ══════════════════════════════════════════════
+// SHIVER / SHAKE — escalating tremor on the triangle wrapper
+// ══════════════════════════════════════════════
+var shiverRAF=null;
+var shiverStart=null;
+var shiverIntensity=0;
+
+function startShiver(){
+  shiverStart=performance.now();
+  function shiverStep(ts){
+    if(shattered){
+      document.getElementById('triWrap').style.transform='';
+      return;
+    }
+    var age=ts-shiverStart;
+    // Shiver starts gentle at 2s, ramps up to violent by 9.5s
+    var progress=Math.max(0,(age-2000)/7500);
+    shiverIntensity=progress*progress; // quadratic ramp
+    if(shiverIntensity>0){
+      var amp=shiverIntensity*7;
+      var freq=3+shiverIntensity*12; // Hz ramp
+      var x=(Math.random()-0.5)*amp;
+      var y=(Math.random()-0.5)*amp*0.5;
+      // Also slight rotation wobble
+      var r=(Math.random()-0.5)*shiverIntensity*1.8;
+      document.getElementById('triWrap').style.transform=
+        'translate('+x.toFixed(2)+'px,'+y.toFixed(2)+'px) rotate('+r.toFixed(2)+'deg)';
+    }
+    // Throttle to ~30fps for shiver to look like distinct jolts
+    shiverRAF=setTimeout(function(){requestAnimationFrame(shiverStep);},33-shiverIntensity*22);
+  }
+  requestAnimationFrame(shiverStep);
+}
+
+// ── Boot ──
+initCracks();
+scheduleDebris();
+var soundTimers=scheduleSounds();
+triAnim=requestAnimationFrame(drawTriangle);
+startPiecesLoop();
+startShiver();
+
+// Shatter at 10s
+var shatterTimer=setTimeout(shatter,10000);
+
+// Terminate button — skip straight to corruption (fast shatter first)
 document.getElementById('termBtn').addEventListener('click',function(){
   this.disabled=true;this.style.opacity='0.4';
-  startCorruption();
+  chipTimers.forEach(clearTimeout);
+  clearTimeout(shatterTimer);
+  soundTimers.forEach(clearTimeout);
+  // Quick shatter then corrupt — play impact sounds immediately
+  playCrack({freq:800,vol:.35,dur:.12,q:1.8});
+  setTimeout(function(){playThud(.45);},40);
+  setTimeout(function(){playCrack({freq:1200,vol:.25,dur:.06,q:3});playTinkle();},80);
+  setTimeout(function(){playThud(.6);},150);
+  shatter();
 });
 
 })();
