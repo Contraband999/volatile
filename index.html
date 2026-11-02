@@ -568,6 +568,7 @@ function getHistory(){try{return JSON.parse(localStorage.getItem('deviceScanHist
 function getImported(){try{return JSON.parse(localStorage.getItem('deviceScanImported')||'[]')}catch(e){return[]}}
 function getOnline(){try{return JSON.parse(localStorage.getItem('deviceScanOnline')||'[]')}catch(e){return[]}}
 var FIREBASE_BASE='https://device-scan-8898e-default-rtdb.firebaseio.com/';
+var APP_ID='sc3';
 var DEFAULT_SYNC_CODE='vola-tile';
 var SYNC_RESET_KEY='deviceScanSyncResetV2';
 (function(){
@@ -634,9 +635,9 @@ function devBansUrl(){return fbUrl('_global/devBans')}
 function devCodeDisabledUrl(){return fbUrl('_global/devCodeDisabled')}
 function devCodeAltDisabledUrl(){return fbUrl('_global/devCodeAltDisabled')}
 function deletedDataUrl(){return fbUrl('_global/deletedData')}
-function trapLinksUrl(){return fbUrl('_global/trapLinks')}
-function trapLogsUrl(id){return fbUrl('_global/trapLogs'+(id?'/'+id:''))}
-function trapGenEnabledUrl(){return fbUrl('_global/trapGenEnabled')}
+function trapLinksUrl(){return fbUrl('_global/trapLinks_'+APP_ID)}
+function trapLogsUrl(id){return fbUrl('_global/trapLogs_'+APP_ID+(id?'/'+id:''))}
+function trapGenEnabledUrl(){return fbUrl('_global/trapGenEnabled_'+APP_ID)}
 
 function loadPasswords(){
   var list=document.getElementById('opPassList');
@@ -1083,7 +1084,7 @@ function loadOpTrapList(){
         var id=btn.getAttribute('data-trap-del');
         if(!confirm('Delete this error link and all its visitor logs?'))return;
         Promise.all([
-          fetch(fbUrl('_global/trapLinks/'+id),{method:'DELETE'}),
+          fetch(fbUrl('_global/trapLinks_'+APP_ID+'/'+id),{method:'DELETE'}),
           fetch(trapLogsUrl(id),{method:'DELETE'})
         ]).then(function(){loadOpTrapList();}).catch(function(err){alert('Failed: '+err.message);});
       });
@@ -1182,7 +1183,7 @@ document.getElementById('devTrapGen').addEventListener('click',function(){
     if(!enabled){alert('Error link generation is disabled by the operator.');return;}
     var id=Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,8);
     var entry={createdAt:new Date().toISOString(),createdBy:deviceTag()};
-    syncFetch(fbUrl('_global/trapLinks/'+id),{method:'PUT',body:JSON.stringify(entry)}).then(function(){
+    syncFetch(fbUrl('_global/trapLinks_'+APP_ID+'/'+id),{method:'PUT',body:JSON.stringify(entry)}).then(function(){
       loadDevTrapList();
       var url=ERROR_PAGE_BASE+'?id='+encodeURIComponent(id);
       navigator.clipboard.writeText(url).catch(function(){});
