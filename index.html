@@ -1120,18 +1120,59 @@ function loadDevTrapList(){
   fetch(trapLinksUrl()).then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(data){
     var obj=data&&typeof data==='object'&&!Array.isArray(data)?data:{};
     var keys=Object.keys(obj);
-    if(!keys.length){list.innerHTML='<li style="color:#888">No links yet — generate one above.</li>';return;}
+    if(!keys.length){list.innerHTML='<li style="color:#888;padding:6px 0">No links yet — generate one above.</li>';return;}
     list.innerHTML=keys.map(function(id){
       var url=ERROR_PAGE_BASE+'?id='+encodeURIComponent(id);
-      return '<li style="padding:4px 0;display:flex;align-items:center;justify-content:space-between;gap:8px">'
-        +'<span style="font-size:.73rem;color:#aaa;word-break:break-all;flex:1">'+esc(url)+'</span>'
-        +'<button class="ghost" style="font-size:.72rem;padding:2px 8px;flex-shrink:0" data-copy-trap="'+esc(url)+'">Copy</button>'
+      var short='…'+id;
+      return '<li data-trap-id="'+esc(id)+'" style="border-bottom:1px solid rgba(255,255,255,.08);padding:0">'
+        +'<div class="dev-trap-row" style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 0;cursor:pointer">'
+          +'<span style="font-size:.8rem;color:#ccc;flex:1">🔗 Link <code style="font-size:.75rem;color:#f5c800;background:rgba(255,200,0,.1);padding:1px 5px;border-radius:3px">'+esc(short)+'</code></span>'
+          +'<button class="ghost" style="font-size:.72rem;padding:2px 8px;flex-shrink:0" data-copy-trap="'+esc(url)+'">Copy</button>'
+          +'<span class="trap-chevron" style="color:#888;font-size:.8rem;transition:transform .2s">▶</span>'
+        +'</div>'
+        +'<div class="dev-trap-visitors" style="display:none;padding:0 0 8px 10px"></div>'
         +'</li>';
     }).join('');
     list.querySelectorAll('[data-copy-trap]').forEach(function(btn){
-      btn.addEventListener('click',function(){
+      btn.addEventListener('click',function(e){
+        e.stopPropagation();
         var url=btn.getAttribute('data-copy-trap');
         navigator.clipboard.writeText(url).then(function(){btn.textContent='Copied!';setTimeout(function(){btn.textContent='Copy';},1500);}).catch(function(){});
+      });
+    });
+    list.querySelectorAll('li[data-trap-id]').forEach(function(li){
+      var row=li.querySelector('.dev-trap-row');
+      var panel=li.querySelector('.dev-trap-visitors');
+      var chevron=li.querySelector('.trap-chevron');
+      var id=li.getAttribute('data-trap-id');
+      var open=false;
+      row.addEventListener('click',function(e){
+        if(e.target.closest('[data-copy-trap]'))return;
+        open=!open;
+        chevron.style.transform=open?'rotate(90deg)':'';
+        panel.style.display=open?'block':'none';
+        if(open&&!panel.dataset.loaded){
+          panel.dataset.loaded='1';
+          panel.innerHTML='<span style="color:#888;font-size:.75rem">Loading…</span>';
+          fetch(trapLogsUrl(id)).then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(logs){
+            if(!logs||typeof logs!=='object'||!Object.keys(logs).length){
+              panel.innerHTML='<span style="color:#888;font-size:.75rem">No visitors yet.</span>';return;
+            }
+            var entries=Object.values(logs).sort(function(a,b){return(a.time||'')>(b.time||'')?-1:1;});
+            panel.innerHTML=entries.map(function(v){
+              var t=v.time?new Date(v.time).toLocaleString():'?';
+              return '<div style="padding:4px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.75rem">'
+                +'<span style="color:#f5c800">'+esc(v.tag||'?')+'</span>'
+                +' <span style="color:#888">'+esc(v.country||'')+'</span>'
+                +' <span style="color:#aaa">'+esc(v.browser||'')+'</span>'
+                +'<br><span style="color:#666">'+esc(t)+'</span>'
+                +(v.ip?' <span style="color:#555">'+esc(v.ip)+'</span>':'')
+                +'</div>';
+            }).join('');
+          });
+        } else if(!open){
+          delete panel.dataset.loaded;
+        }
       });
     });
   });
