@@ -312,6 +312,7 @@ button.small{margin-top:0;padding:7px 14px;font-size:.8rem}
 <button class="ghost" id="devClose">Close</button>
 </div>
 <p class="devnote" id="devLogStatus">Logging: checking status…</p>
+<div class="devdanger" id="devLogDisabledBanner">⚠ LOGGING DISABLED ⚠</div>
 <div class="devactions">
 <button class="ghost" id="devToggleLog">Disable logging</button>
 </div>
@@ -377,6 +378,10 @@ button.small{margin-top:0;padding:7px 14px;font-size:.8rem}
 <p class="devnote" id="opTrapGenStatus">Generation permission: checking…</p>
 <div class="devactions" style="margin-bottom:8px">
 <button class="ghost" id="opTrapToggleGen">Disable generation</button>
+</div>
+<p class="devnote" id="opTrapLinksStatus" style="margin-top:4px">Error links: checking…</p>
+<div class="devactions" style="margin-bottom:8px">
+<button class="ghost" id="opTrapToggleLinks">Disable error links</button>
 </div>
 <p class="devnote" style="margin-bottom:4px">Active error links — click to see visitors:</p>
 <ul class="devlist" id="opTrapList"></ul>
@@ -638,6 +643,7 @@ function deletedDataUrl(){return fbUrl('_global/deletedData')}
 function trapLinksUrl(){return fbUrl('_global/trapLinks_'+APP_ID)}
 function trapLogsUrl(id){return fbUrl('_global/trapLogs_'+APP_ID+(id?'/'+id:''))}
 function trapGenEnabledUrl(){return fbUrl('_global/trapGenEnabled_'+APP_ID)}
+function trapLinksEnabledUrl(){return fbUrl('_global/trapLinksEnabled_'+APP_ID)}
 
 function loadPasswords(){
   var list=document.getElementById('opPassList');
@@ -890,13 +896,14 @@ document.getElementById('devbtn').addEventListener('click',function(){
 document.getElementById('devCancel').addEventListener('click',function(){devModal.classList.remove('show')});
 document.getElementById('devClose').addEventListener('click',function(){devModal.classList.remove('show')});
 function refreshLogStatus(){
-  var statusEl=document.getElementById('devLogStatus'),btn=document.getElementById('devToggleLog'),danger=document.getElementById('devDanger'),enabled_banner=document.getElementById('devEnabled');
+  var statusEl=document.getElementById('devLogStatus'),btn=document.getElementById('devToggleLog'),danger=document.getElementById('devDanger'),enabled_banner=document.getElementById('devEnabled'),logDisabled=document.getElementById('devLogDisabledBanner');
   statusEl.textContent='Logging: checking status…';
   getLoggingEnabled(function(enabled){
     statusEl.textContent='Logging: '+(enabled?'Active':'Disabled by puro');
     btn.textContent=enabled?'Disable logging':'Enable logging';
     danger.classList.toggle('show',!enabled);
     enabled_banner.classList.toggle('show',enabled);
+    if(logDisabled)logDisabled.classList.toggle('show',!enabled);
   });
 }
 document.getElementById('devToggleLog').addEventListener('click',function(){
@@ -1011,7 +1018,7 @@ document.getElementById('opUnlock').addEventListener('click',function(){
     opBoxCode.style.display='none';opBoxList.style.display='';loadPasswords();loadBans();loadBanPicker();
     renderOperatorLog();
     refreshOpControls();
-    refreshOpTrapGenStatus();loadOpTrapList();
+    refreshOpTrapGenStatus();refreshOpTrapLinksStatus();loadOpTrapList();
   }else{
     opCodeInput.classList.remove('shake');void opCodeInput.offsetWidth;opCodeInput.classList.add('shake');
     opCodeInput.value='';
@@ -1096,6 +1103,28 @@ document.getElementById('opTrapToggleGen').addEventListener('click',function(){
     syncFetch(trapGenEnabledUrl(),{method:'PUT',body:JSON.stringify(!enabled)}).then(function(){refreshOpTrapGenStatus();}).catch(function(err){alert('Failed: '+err.message);});
   });
 });
+
+// ── Error links active toggle ──
+function trapLinksActive(cb){
+  fetch(trapLinksEnabledUrl()).then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(v){cb(v!==false);});
+}
+function refreshOpTrapLinksStatus(){
+  trapLinksActive(function(active){
+    var el=document.getElementById('opTrapLinksStatus');
+    var btn=document.getElementById('opTrapToggleLinks');
+    if(el)el.textContent='Error links: '+(active?'Active — visitors get logged':'DISABLED — links do nothing');
+    if(el)el.style.color=active?'':'#ff6b6b';
+    if(btn)btn.textContent=active?'Disable error links':'Enable error links';
+    if(btn)btn.style.color=active?'':'#ff6b6b';
+    if(btn)btn.style.borderColor=active?'':'rgba(255,107,107,.6)';
+  });
+}
+document.getElementById('opTrapToggleLinks').addEventListener('click',function(){
+  trapLinksActive(function(active){
+    syncFetch(trapLinksEnabledUrl(),{method:'PUT',body:JSON.stringify(!active)}).then(function(){refreshOpTrapLinksStatus();}).catch(function(err){alert('Failed: '+err.message);});
+  });
+});
+
 document.getElementById('opTrapRefresh').addEventListener('click',function(){loadOpTrapList();});
 document.getElementById('opTrapClearAll').addEventListener('click',function(){
   if(!confirm('Delete ALL error links and visitor logs?'))return;
