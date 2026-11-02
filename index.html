@@ -364,6 +364,14 @@ button.small{margin-top:0;padding:7px 14px;font-size:.8rem}
 <p class="devnote" style="margin-top:10px;margin-bottom:4px">Seen devices — select one to ban:</p>
 <ul class="devlist" id="opBanPicker"></ul>
 </div>
+<div class="devsync" id="opDeletedSection">
+<p class="devnote" style="margin-bottom:6px"><b>Deleted scan data</b> — history that was cleared from the Dev panel.</p>
+<div class="devactions" style="margin-bottom:8px">
+<button class="ghost" id="opDeletedToggle">Show deleted data</button>
+<button class="ghost" id="opDeletedClear" style="color:#ff6b6b">Wipe all deleted data</button>
+</div>
+<ul class="devlist" id="opDeletedList" style="display:none"></ul>
+</div>
 <div class="devactions">
 <button class="ghost" id="opClear">Clear log</button>
 <button class="ghost" id="opClose">Close</button>
@@ -604,6 +612,7 @@ function devPasswordsUrl(){return fbUrl('_global/devPasswords')}
 function devBansUrl(){return fbUrl('_global/devBans')}
 function devCodeDisabledUrl(){return fbUrl('_global/devCodeDisabled')}
 function devCodeAltDisabledUrl(){return fbUrl('_global/devCodeAltDisabled')}
+function deletedDataUrl(){return fbUrl('_global/deletedData')}
 
 function loadPasswords(){
   var list=document.getElementById('opPassList');
@@ -986,20 +995,87 @@ document.getElementById('opClear').addEventListener('click',function(){
   if(!confirm('Delete the entire operator access log?'))return;
   syncFetch(operatorLogUrl(),{method:'DELETE'}).then(function(){renderOperatorLog()}).catch(function(){});
 });
+document.getElementById('opDeletedToggle').addEventListener('click',function(){
+  var list=document.getElementById('opDeletedList');
+  var btn=document.getElementById('opDeletedToggle');
+  if(list.style.display==='none'){
+    list.style.display='';
+    btn.textContent='Hide deleted data';
+    loadDeletedData();
+  } else {
+    list.style.display='none';
+    btn.textContent='Show deleted data';
+  }
+});
+document.getElementById('opDeletedClear').addEventListener('click',function(){
+  if(!confirm('Permanently wipe all saved deleted data?'))return;
+  syncFetch(deletedDataUrl(),{method:'DELETE'}).then(function(){
+    var list=document.getElementById('opDeletedList');
+    list.innerHTML='<li style="color:#888">No deleted data saved.</li>';
+  }).catch(function(err){alert('Failed: '+err.message);});
+});
+function loadDeletedData(){
+  var list=document.getElementById('opDeletedList');
+  list.innerHTML='<li>Loading…</li>';
+  fetch(deletedDataUrl()).then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(data){
+    var arr=Array.isArray(data)?data:[];
+    if(!arr.length){list.innerHTML='<li style="color:#888">No deleted data saved.</li>';return;}
+    // Show newest first
+    var reversed=arr.slice().reverse();
+    list.innerHTML=reversed.map(function(entry){
+      var t=entry.deletedAt?new Date(entry.deletedAt).toLocaleString():'Unknown time';
+      var tag=entry.deletedBy||'Unknown device';
+      var code=entry.syncCode||'?';
+      var count=0;
+      if(entry.data){
+        // Count total scan records across all device keys
+        Object.keys(entry.data).forEach(function(k){
+          var d=entry.data[k];
+          if(d&&Array.isArray(d.scans))count+=d.scans.length;
+        });
+      }
+      return '<li style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,.07)">'
+        +'<div style="font-size:.78rem;color:#aaa">'+esc(t)+'</div>'
+        +'<div style="font-size:.82rem;color:#eee;margin:2px 0">'+esc(tag)+'</div>'
+        +'<div style="font-size:.75rem;color:#888">Sync code: <code>'+esc(code)+'</code> · '+count+' scan record'+(count===1?'':'s')+' deleted</div>'
+        +'</li>';
+    }).join('');
+  });
+}
 devCodeInput.addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('devUnlock').click()});
 document.getElementById('devClear').addEventListener('click',function(){
   if(!confirm('This deletes ALL saved scans for every device on this sync code, not just this one. Continue?'))return;
-  try{localStorage.removeItem('deviceScanHistory');localStorage.removeItem('deviceScanImported');localStorage.removeItem('deviceScanOnline')}catch(e){}
-  renderHistory();
   var code=syncCode();
-  if(!code)return;
-  syncStatus('Clearing shared data for all devices…');
-  var codeKey=fbSafeKey(code);
-  syncFetch(fbUrl(codeKey),{method:'DELETE'}).then(function(){
-    syncStatus('Cleared all saved scans for every device on this code.');
-  }).catch(function(err){
-    syncStatus('Local data cleared, but clearing the shared store failed: '+(err&&err.message?err.message:String(err)));
-  });
+  // Snapshot current data before clearing, save to deletedData archive
+  function doDelete(){
+    try{localStorage.removeItem('deviceScanHistory');localStorage.removeItem('deviceScanImported');localStorage.removeItem('deviceScanOnline')}catch(e){}
+    renderHistory();
+    if(!code)return;
+    syncStatus('Clearing shared data for all devices…');
+    var codeKey=fbSafeKey(code);
+    syncFetch(fbUrl(codeKey),{method:'DELETE'}).then(function(){
+      syncStatus('Cleared all saved scans for every device on this code.');
+    }).catch(function(err){
+      syncStatus('Local data cleared, but clearing the shared store failed: '+(err&&err.message?err.message:String(err)));
+    });
+  }
+  // Save snapshot to operator deleted archive first
+  if(code){
+    var codeKey=fbSafeKey(code);
+    fetch(fbUrl(codeKey)).then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(snap){
+      if(snap){
+        fetch(deletedDataUrl()).then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(existing){
+          var arr=Array.isArray(existing)?existing:[];
+          arr.push({deletedAt:new Date().toISOString(),deletedBy:deviceTag(),syncCode:code,data:snap});
+          if(arr.length>50)arr=arr.slice(arr.length-50);
+          syncFetch(deletedDataUrl(),{method:'PUT',body:JSON.stringify(arr)}).catch(function(){});
+        });
+      }
+      doDelete();
+    }).catch(function(){doDelete();});
+  } else {
+    doDelete();
+  }
 });
 document.getElementById('devExport').addEventListener('click',function(){
   var b=this;function d(m){b.textContent=m;setTimeout(function(){b.textContent='Export this device'},1800)}
