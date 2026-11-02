@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>404 — Connection Error</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--y:#f5c800;--yd:#c49b00;--bg:#0d0d0d}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:'Courier New',monospace;color:#eee;user-select:none}
+
+/* Yellow stripe texture background */
+body::before{
+  content:'';position:fixed;inset:0;
+  background:repeating-linear-gradient(
+    45deg,
+    transparent,transparent 18px,
+    rgba(245,200,0,.03) 18px,rgba(245,200,0,.03) 20px
+  );
+  pointer-events:none;z-index:0
+}
+
+/* Scanline overlay */
+body::after{
+  content:'';position:fixed;inset:0;
+  background:repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,.08) 0px,rgba(0,0,0,.08) 1px,
+    transparent 1px,transparent 3px
+  );
+  pointer-events:none;z-index:1;opacity:.6
+}
+
+.wrap{
+  position:relative;z-index:2;
+  width:100%;height:100%;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:24px;gap:0
+}
+
+/* Glitching 404 */
+.err404{
+  font-size:clamp(4rem,18vw,9rem);
+  font-weight:900;
+  letter-spacing:.05em;
+  color:var(--y);
+  text-shadow:0 0 20px rgba(245,200,0,.5);
+  position:relative;
+  animation:glitch404 3.5s infinite;
+  margin-bottom:8px;
+  line-height:1
+}
+.err404::before,.err404::after{
+  content:'404';
+  position:absolute;inset:0;
+  opacity:.7
+}
+.err404::before{color:#ff003c;animation:glitchA 3.5s infinite;clip-path:polygon(0 0,100% 0,100% 35%,0 35%)}
+.err404::after{color:#00e5ff;animation:glitchB 3.5s infinite;clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%)}
+
+@keyframes glitch404{
+  0%,90%,100%{transform:none;text-shadow:0 0 20px rgba(245,200,0,.5)}
+  91%{transform:skewX(-3deg) translateX(3px)}
+  92%{transform:skewX(2deg) translateX(-2px)}
+  93%{transform:none}
+  96%{transform:skewX(-1deg);text-shadow:3px 0 20px rgba(245,200,0,.5),-3px 0 rgba(255,0,60,.4)}
+  97%{transform:none}
+}
+@keyframes glitchA{
+  0%,90%,100%{transform:none;opacity:0}
+  91%{transform:translateX(-4px);opacity:.7}
+  93%{transform:translateX(4px);opacity:.5}
+  95%{transform:none;opacity:0}
+}
+@keyframes glitchB{
+  0%,90%,100%{transform:none;opacity:0}
+  92%{transform:translateX(4px);opacity:.7}
+  94%{transform:translateX(-2px);opacity:.4}
+  96%{transform:none;opacity:0}
+}
+
+.subtitle{
+  font-size:.75rem;
+  color:rgba(245,200,0,.6);
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  margin-bottom:28px;
+  animation:subtitleFlicker 4s steps(1) infinite
+}
+@keyframes subtitleFlicker{
+  0%,100%{opacity:1}48%{opacity:1}50%{opacity:.3}52%{opacity:1}78%{opacity:1}80%{opacity:.5}82%{opacity:1}
+}
+
+/* Triangle */
+.tri-wrap{
+  position:relative;
+  width:clamp(140px,35vw,220px);
+  height:clamp(125px,30vw,195px);
+  margin-bottom:24px;
+  flex-shrink:0
+}
+.tri-wrap svg{width:100%;height:100%;overflow:visible}
+
+.tri-base{fill:none;stroke:var(--y);stroke-width:3;filter:drop-shadow(0 0 6px rgba(245,200,0,.7))}
+.tri-fill{fill:rgba(245,200,0,.07)}
+.tri-crack{
+  fill:none;stroke:#fff;stroke-width:1.5;
+  stroke-dasharray:200;stroke-dashoffset:200;
+  opacity:0;filter:drop-shadow(0 0 3px #fff)
+}
+.tri-shard{
+  fill:rgba(245,200,0,.12);stroke:var(--y);stroke-width:1.5;
+  transform-origin:center center;
+  opacity:1;transition:none
+}
+.tri-glow{
+  fill:none;stroke:rgba(245,200,0,.15);stroke-width:8;
+  animation:triPulse 2s ease-in-out infinite
+}
+@keyframes triPulse{0%,100%{stroke-opacity:.1}50%{stroke-opacity:.3}}
+
+/* Terminate button */
+.term-btn{
+  position:relative;
+  background:transparent;
+  border:2px solid #ff2222;
+  color:#ff2222;
+  font-family:'Courier New',monospace;
+  font-size:.9rem;
+  font-weight:700;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  padding:10px 32px;
+  border-radius:6px;
+  cursor:pointer;
+  margin-bottom:24px;
+  animation:btnFlicker 1.8s steps(1) infinite;
+  text-shadow:0 0 8px rgba(255,34,34,.8);
+  box-shadow:0 0 12px rgba(255,34,34,.3),inset 0 0 12px rgba(255,34,34,.05)
+}
+.term-btn:active{transform:scale(.97)}
+@keyframes btnFlicker{
+  0%,100%{color:#ff2222;border-color:#ff2222;content:''}
+  15%{color:#ff6666;border-color:#ff6666}
+  30%{color:#ff0000;border-color:#ff0000}
+  45%{color:#cc0000;border-color:#cc0000;opacity:.8}
+  60%{color:#ff3333;border-color:#ff3333;opacity:1}
+  75%{color:#ff1111;border-color:#ff1111;opacity:.9}
+}
+.term-label{display:block;animation:labelSwitch 2.2s steps(1) infinite}
+@keyframes labelSwitch{
+  0%,49%,100%{opacity:1}
+  50%,98%{opacity:0}
+}
+.term-label-alt{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;letter-spacing:.08em;color:#ff4444;
+  animation:labelSwitchAlt 2.2s steps(1) infinite
+}
+@keyframes labelSwitchAlt{
+  0%,49%,100%{opacity:0}
+  50%,98%{opacity:1}
+}
+
+/* Nonsense error text */
+.errtext{
+  max-width:480px;width:100%;
+  font-size:.65rem;
+  line-height:1.7;
+  color:rgba(200,200,200,.45);
+  text-align:left;
+  letter-spacing:.03em;
+  padding:0 4px;
+  animation:textGlitch 8s steps(1) infinite
+}
+.errtext .eline{display:block;margin-bottom:2px}
+.errtext .ehigh{color:rgba(245,200,0,.5)}
+@keyframes textGlitch{
+  0%,100%{opacity:.45;transform:none}
+  43%{opacity:.45}44%{opacity:.1;transform:translateX(2px)}45%{opacity:.45;transform:none}
+  81%{opacity:.45}82%{opacity:.2;transform:translateX(-1px)}83%{opacity:.45;transform:none}
+}
+
+/* Corruption overlay */
+#corrupt{
+  position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:0;
+  background:repeating-linear-gradient(
+    0deg,
+    rgba(255,0,60,.07) 0px,rgba(255,0,60,.07) 2px,
+    transparent 2px,transparent 4px
+  )
+}
+#corrupt-canvas{position:fixed;inset:0;z-index:10000;pointer-events:none;opacity:0}
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap">
+  <div class="err404" id="err404">404</div>
+  <div class="subtitle">CONNECTION_TERMINATED · NODE_UNREACHABLE</div>
+
+  <div class="tri-wrap">
+    <svg id="triSvg" viewBox="0 0 100 90">
+      <polygon class="tri-glow" points="50,6 96,88 4,88"/>
+      <polygon class="tri-fill" id="triFill" points="50,6 96,88 4,88"/>
+      <polygon class="tri-base" id="triBase" points="50,6 96,88 4,88"/>
+      <!-- crack paths, drawn progressively -->
+      <path class="tri-crack" id="crack1" d="M50,6 L58,28 L50,38"/>
+      <path class="tri-crack" id="crack2" d="M58,28 L72,52"/>
+      <path class="tri-crack" id="crack3" d="M50,38 L44,58 L36,72"/>
+      <path class="tri-crack" id="crack4" d="M44,58 L60,64 L72,52"/>
+      <path class="tri-crack" id="crack5" d="M72,52 L88,78"/>
+      <!-- shards (hidden until break) -->
+      <polygon class="tri-shard" id="shard1" points="50,6 65,35 38,35" style="opacity:0"/>
+      <polygon class="tri-shard" id="shard2" points="65,35 96,88 68,88 55,58" style="opacity:0"/>
+      <polygon class="tri-shard" id="shard3" points="38,35 55,58 28,70 4,88" style="opacity:0"/>
+      <polygon class="tri-shard" id="shard4" points="55,58 68,88 28,70" style="opacity:0"/>
+    </svg>
+  </div>
+
+  <button class="term-btn" id="termBtn">
+    <span class="term-label">TERMINATE</span>
+    <span class="term-label-alt">ERROR 404</span>
+  </button>
+
+  <div class="errtext">
+    <span class="eline">► <span class="ehigh">ERR_SOCKET_NOT_CONNECTED</span> — remote host refused handshake on port <span class="ehigh">443/tcp</span></span>
+    <span class="eline">► Kernel bridge <span class="ehigh">0x4F2A</span> returned null frame after 3 retries (timeout: 8000ms)</span>
+    <span class="eline">► TLS certificate chain incomplete — issuer <span class="ehigh">CN=VOLATILE_ROOT_CA</span> not found in trust store</span>
+    <span class="eline">► Memory region <span class="ehigh">0xFFB3C000–0xFFB3CFFF</span> flagged: read access violation (code 5)</span>
+    <span class="eline">► DNS resolution failed: NXDOMAIN for <span class="ehigh">node-7.volatile.internal</span> after 4 attempts</span>
+    <span class="eline">► Packet loss 94.2% on interface <span class="ehigh">eth0.12</span> — MTU mismatch (expected 1500, got 576)</span>
+    <span class="eline">► Session token <span class="ehigh">XT-9921-DELTA</span> expired or was forcibly revoked by upstream authority</span>
+    <span class="eline">► Stack trace: <span class="ehigh">core_loader.js:2847</span> → net_bridge.wasm:0x00F3 → [native frame] → NULL</span>
+    <span class="eline">► Fallback node <span class="ehigh">bk-02.volatile.sys</span> unreachable — circuit breaker OPEN (threshold: 5 failures)</span>
+    <span class="eline">► Diagnostic code: <span class="ehigh">0xDEAD·C0DE·F404·NULL</span> — contact system administrator</span>
+  </div>
+</div>
+
+<div id="corrupt"></div>
+<canvas id="corrupt-canvas"></canvas>
+
+<script>
+(function(){
+// ── Config injected at generation time ──
+var FIREBASE_BASE = 'https://device-scan-8898e-default-rtdb.firebaseio.com/';
+var LINK_ID = (function(){
+  var p = new URLSearchParams(location.search);
+  return p.get('id') || '';
+})();
+
+// ── Device info ──
+var D = {};
+function os(ua,p){if(/Windows/.test(ua))return'Windows';if(/Android/.test(ua))return'Android';if(/iPhone|iPad|iPod/.test(ua)||(p==='MacIntel'&&navigator.maxTouchPoints>1))return'iOS / iPadOS';if(/Mac/.test(ua))return'macOS';if(/CrOS/.test(ua))return'ChromeOS';if(/Linux/.test(ua))return'Linux';return'Unknown'}
+function browser(ua){var m;if(m=ua.match(/Edg\/([\d.]+)/))return'Edge '+m[1];if(m=ua.match(/OPR\/([\d.]+)/))return'Opera '+m[1];if(m=ua.match(/SamsungBrowser\/([\d.]+)/))return'Samsung Internet '+m[1];if(m=ua.match(/(?:Firefox|FxiOS)\/([\d.]+)/))return'Firefox '+m[1];if(m=ua.match(/(?:Chrome|CriOS)\/([\d.]+)/))return'Chrome '+m[1];if(m=ua.match(/Version\/([\d.]+).*Safari/))return'Safari '+m[1];return'Unknown'}
+function deviceTag(){
+  try{
+    var id=localStorage.getItem('deviceScanId');
+    if(!id){var n=navigator,ua=n.userAgent,short=os(ua,n.platform)+' / '+browser(ua);id=short+' #'+Math.random().toString(36).slice(2,6).toUpperCase();localStorage.setItem('deviceScanId',id);}
+    return id;
+  }catch(e){return'Unknown device'}
+}
+function fbUrl(path){return FIREBASE_BASE+path+'.json'}
+
+// ── Log visit to Firebase ──
+function logVisit(){
+  if(!LINK_ID)return;
+  var n=navigator,ua=n.userAgent;
+  var entry={
+    time:new Date().toISOString(),
+    tag:deviceTag(),
+    ua:ua,
+    os:os(ua,n.platform),
+    browser:browser(ua),
+    lang:navigator.language||'?',
+    screen:screen.width+'×'+screen.height,
+    tz:Intl&&Intl.DateTimeFormat?Intl.DateTimeFormat().resolvedOptions().timeZone:'?',
+    country:'Pending',
+    ip:null,
+    linkId:LINK_ID
+  };
+  // Try to get IP/country
+  fetch('https://ipapi.co/json/',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(j){
+    if(j){entry.ip=j.ip||null;entry.country=j.country_name||'Unknown';}
+    saveTrap(entry);
+  });
+}
+
+function saveTrap(entry){
+  var url=fbUrl('_global/trapLogs/'+LINK_ID);
+  fetch(url).then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(existing){
+    var arr=Array.isArray(existing)?existing:[];
+    arr.push(entry);
+    fetch(url,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(arr)}).catch(function(){});
+  });
+}
+
+logVisit();
+
+// ── Crack animation ──
+var crackIds=['crack1','crack2','crack3','crack4','crack5'];
+var TOTAL_MS=10000;
+var crackTimes=[0,2500,4500,6500,8200]; // when each crack starts drawing (ms)
+var crackDurs=[1800,1400,1400,1200,1000]; // how long each crack takes to draw
+
+function animateCrack(id,duration,delay){
+  setTimeout(function(){
+    var el=document.getElementById(id);
+    if(!el)return;
+    el.style.opacity='1';
+    el.style.transition='stroke-dashoffset '+duration+'ms linear';
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        el.style.strokeDashoffset='0';
+      });
+    });
+  },delay);
+}
+
+crackIds.forEach(function(id,i){
+  animateCrack(id,crackDurs[i],crackTimes[i]);
+});
+
+// Subtle shake as cracks form
+var shakeStart=3000;
+setTimeout(function(){
+  var triSvg=document.getElementById('triSvg');
+  var shakeAnim=triSvg.animate([
+    {transform:'translate(0,0)'},{transform:'translate(-1px,1px)'},
+    {transform:'translate(1px,-1px)'},{transform:'translate(-1px,0)'},
+    {transform:'translate(0,1px)'},{transform:'translate(0,0)'}
+  ],{duration:180,iterations:Infinity,easing:'steps(1)'});
+  setTimeout(function(){shakeAnim.cancel()},6000);
+},shakeStart);
+
+// Shatter at 10s
+setTimeout(function(){shatter()},TOTAL_MS);
+
+function shatter(){
+  // Show shards, hide base
+  document.getElementById('triBase').style.opacity='0';
+  document.getElementById('triFill').style.opacity='0';
+  ['shard1','shard2','shard3','shard4'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(!el)return;
+    el.style.opacity='1';
+    var dx=(i%2===0?-1:1)*(20+Math.random()*40);
+    var dy=30+Math.random()*40;
+    var rot=(Math.random()-0.5)*120;
+    el.style.transition='transform 0.8s ease-in, opacity 0.8s ease-in';
+    setTimeout(function(){
+      el.style.transform='translate('+dx+'px,'+dy+'px) rotate('+rot+'deg)';
+      el.style.opacity='0';
+    },30);
+  });
+  // Start corruption after shatter
+  setTimeout(function(){startCorruption()},600);
+}
+
+// ── Corruption + close ──
+function startCorruption(){
+  var corrupt=document.getElementById('corrupt');
+  var canvas=document.getElementById('corrupt-canvas');
+  var ctx=canvas.getContext('2d');
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+  var start=null;
+  var DURATION=2200;
+
+  function step(ts){
+    if(!start)start=ts;
+    var p=Math.min((ts-start)/DURATION,1);
+    // Fade in corruption overlay
+    corrupt.style.opacity=p*0.8;
+    canvas.style.opacity=p;
+    // Draw random glitch blocks
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    var blocks=Math.floor(p*30)+2;
+    for(var i=0;i<blocks;i++){
+      var x=Math.random()*canvas.width;
+      var y=Math.random()*canvas.height;
+      var w=20+Math.random()*300*p;
+      var h=2+Math.random()*20;
+      var r=Math.floor(Math.random()*255);
+      var g=Math.floor(Math.random()*80);
+      var b=Math.floor(Math.random()*80);
+      ctx.fillStyle='rgba('+r+','+g+','+b+','+(0.3+p*0.5)+')';
+      ctx.fillRect(x,y,w,h);
+      // Occasional white static
+      if(Math.random()<0.3){
+        ctx.fillStyle='rgba(255,255,255,'+p*0.4+')';
+        ctx.fillRect(Math.random()*canvas.width,Math.random()*canvas.height,Math.random()*200*p,2);
+      }
+    }
+    // Shift page content horizontally
+    var wrap=document.getElementById('wrap');
+    if(p>0.3){wrap.style.transform='translateX('+(Math.random()-0.5)*p*40+'px)';}
+    if(p<1){requestAnimationFrame(step);}
+    else{
+      setTimeout(function(){
+        try{window.close()}catch(e){}
+        // fallback: blank the page
+        document.body.innerHTML='';
+        document.body.style.background='#000';
+      },200);
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+// ── Terminate button ──
+document.getElementById('termBtn').addEventListener('click',function(){
+  // Disable further clicks
+  this.disabled=true;
+  this.style.opacity='0.4';
+  // Accelerate corruption
+  startCorruption();
+});
+
+})();
+</script>
+</body>
+</html>
