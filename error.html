@@ -227,31 +227,51 @@ function buildCracks(W,H,pad){
   var ABt=lerp(A,B,.7);
   var ACt=lerp(A,C,.7);
 
+  // Center of triangle
+  var CX=W/2, CY=H*0.62;
+  // Extra interior reference points
+  var MID_L={x:W*0.32,y:H*0.55};  // left interior
+  var MID_R={x:W*0.68,y:H*0.55};  // right interior
+  var MID_T={x:W*0.5, y:H*0.38};  // upper interior center
+  var MID_B={x:W*0.5, y:H*0.78};  // lower interior center
+
   return [
-    // 1: main top split, apex downward
-    {pts:[A,{x:A.x+4,y:A.y+14},{x:A.x-3,y:A.y+26},AB],style:'main',delay:0,dur:1500},
-    // 2: branch right from split point toward B
-    {pts:[AB,{x:AB.x+8,y:AB.y+12},ABt,{x:B.x-8,y:B.y-10}],style:'main',delay:2000,dur:1300},
-    // 3: branch left from split toward C
-    {pts:[{x:A.x-3,y:A.y+26},AC,{x:AC.x-6,y:AC.y+10},{x:C.x+10,y:C.y-8}],style:'sub',delay:3000,dur:1200},
-    // 4: horizontal stress across middle
-    {pts:[{x:C.x+18,y:BC.y},{x:BC.x-10,y:BC.y-4},BC,{x:BC.x+12,y:BC.y+2},{x:B.x-16,y:BC.y}],style:'sub',delay:4200,dur:1000},
-    // 5: secondary right split from ABt
-    {pts:[ABt,{x:ABt.x+5,y:ABt.y+8},{x:ABt.x+2,y:ABt.y+16}],style:'thin',delay:5100,dur:700},
-    // 6: left lower spider crack
-    {pts:[ACt,{x:ACt.x-4,y:ACt.y+8},{x:ACt.x-8,y:ACt.y+14},{x:ACt.x-4,y:ACt.y+20}],style:'thin',delay:5800,dur:750},
-    // 7: top right edge fracture
-    {pts:[ABq,{x:ABq.x+6,y:ABq.y-4},{x:ABq.x+10,y:ABq.y+3}],style:'thin',delay:6500,dur:600},
-    // 8: top left edge fracture
-    {pts:[ACq,{x:ACq.x-5,y:ACq.y-3},{x:ACq.x-9,y:ACq.y+5}],style:'thin',delay:7000,dur:600},
-    // 9: bottom center drop
-    {pts:[BC,{x:BC.x+2,y:BC.y+6},{x:BC.x-2,y:BC.y+12}],style:'sub',delay:7600,dur:700},
-    // 10: micro detail near apex
-    {pts:[{x:A.x+8,y:A.y+18},{x:A.x+14,y:A.y+14},{x:A.x+18,y:A.y+22}],style:'thin',delay:8200,dur:500},
-    // 11: right edge fine crack
-    {pts:[{x:ABt.x+4,y:ABt.y-6},{x:ABt.x+10,y:ABt.y+2}],style:'thin',delay:8600,dur:450},
-    // 12: left edge fine crack
-    {pts:[{x:ACt.x-5,y:ACt.y-4},{x:ACt.x-11,y:ACt.y+4}],style:'thin',delay:8900,dur:400},
+    // 1: main top split, apex straight down through center
+    {pts:[A,{x:A.x+2,y:A.y+18},{x:CX+1,y:CY*0.55},{x:CX-2,y:CY},{x:CX+1,y:MID_B.y}],style:'main',delay:0,dur:1600},
+    // 2: branch right from center toward B
+    {pts:[{x:CX,y:CY},{x:CX+12,y:CY+8},{x:MID_R.x,y:MID_R.y},{x:B.x-6,y:B.y-12}],style:'main',delay:1800,dur:1200},
+    // 3: branch left from center toward C
+    {pts:[{x:CX-2,y:CY},{x:CX-14,y:CY+6},{x:MID_L.x,y:MID_L.y},{x:C.x+8,y:C.y-10}],style:'main',delay:2800,dur:1200},
+    // 4: diagonal slash top-left to bottom-right through center
+    {pts:[{x:W*0.28,y:H*0.3},{x:W*0.38,y:H*0.46},{x:CX,y:CY*0.88},{x:W*0.62,y:H*0.72},{x:W*0.72,y:H*0.84}],style:'sub',delay:3800,dur:1100},
+    // 5: diagonal slash top-right to bottom-left through center
+    {pts:[{x:W*0.72,y:H*0.3},{x:W*0.62,y:H*0.46},{x:CX+2,y:CY*0.85},{x:W*0.38,y:H*0.72},{x:W*0.28,y:H*0.84}],style:'sub',delay:4600,dur:1100},
+    // 6: horizontal rift through center
+    {pts:[{x:W*0.2,y:CY-4},{x:W*0.35,y:CY+2},{x:CX,y:CY-3},{x:W*0.65,y:CY+3},{x:W*0.8,y:CY-2}],style:'sub',delay:5400,dur:900},
+    // 7: spider web upper-center — short branches from main crack
+    {pts:[{x:CX,y:H*0.32},{x:CX+10,y:H*0.28},{x:CX+18,y:H*0.24}],style:'thin',delay:2000,dur:600},
+    {pts:[{x:CX,y:H*0.32},{x:CX-8,y:H*0.27},{x:CX-16,y:H*0.22}],style:'thin',delay:2200,dur:600},
+    // 8: center-left fracture web
+    {pts:[{x:MID_L.x,y:MID_L.y},{x:MID_L.x-8,y:MID_L.y-10},{x:MID_L.x-14,y:MID_L.y-6}],style:'thin',delay:3200,dur:500},
+    {pts:[{x:MID_L.x,y:MID_L.y},{x:MID_L.x-6,y:MID_L.y+10},{x:MID_L.x-10,y:MID_L.y+18}],style:'thin',delay:3400,dur:500},
+    // 9: center-right fracture web
+    {pts:[{x:MID_R.x,y:MID_R.y},{x:MID_R.x+8,y:MID_R.y-8},{x:MID_R.x+12,y:MID_R.y-4}],style:'thin',delay:2400,dur:500},
+    {pts:[{x:MID_R.x,y:MID_R.y},{x:MID_R.x+5,y:MID_R.y+10},{x:MID_R.x+8,y:MID_R.y+18}],style:'thin',delay:2600,dur:500},
+    // 10: lower center crumble
+    {pts:[{x:CX,y:MID_B.y},{x:CX-10,y:MID_B.y+8},{x:CX-6,y:MID_B.y+16}],style:'thin',delay:6200,dur:600},
+    {pts:[{x:CX,y:MID_B.y},{x:CX+12,y:MID_B.y+6},{x:CX+8,y:MID_B.y+16}],style:'thin',delay:6400,dur:600},
+    // 11: fine micro-cracks radiating from main center split
+    {pts:[{x:CX-1,y:CY*0.7},{x:CX+16,y:CY*0.68},{x:CX+22,y:CY*0.64}],style:'thin',delay:7000,dur:450},
+    {pts:[{x:CX-1,y:CY*0.7},{x:CX-14,y:CY*0.67},{x:CX-20,y:CY*0.62}],style:'thin',delay:7200,dur:450},
+    // 12: bottom edge stress lines
+    {pts:[{x:C.x+20,y:C.y-8},{x:C.x+28,y:C.y-18},{x:C.x+24,y:C.y-28}],style:'thin',delay:7800,dur:400},
+    {pts:[{x:B.x-18,y:B.y-8},{x:B.x-26,y:B.y-16},{x:B.x-22,y:B.y-28}],style:'thin',delay:8000,dur:400},
+    // 13: near-apex spider
+    {pts:[{x:A.x+6,y:A.y+22},{x:A.x+16,y:A.y+18},{x:A.x+22,y:A.y+24}],style:'thin',delay:8400,dur:380},
+    {pts:[{x:A.x-4,y:A.y+24},{x:A.x-14,y:A.y+20},{x:A.x-20,y:A.y+26}],style:'thin',delay:8600,dur:380},
+    // 14: final crumble web in center
+    {pts:[{x:CX+4,y:CY+10},{x:CX+20,y:CY+4},{x:CX+30,y:CY+12}],style:'thin',delay:9000,dur:350},
+    {pts:[{x:CX-3,y:CY+12},{x:CX-18,y:CY+6},{x:CX-28,y:CY+14}],style:'thin',delay:9100,dur:350},
   ];
 }
 
@@ -654,10 +674,31 @@ function startCorruption(){
 // AUDIO — Web Audio API crack sounds
 // ══════════════════════════════════════════════
 var audioCtx=null;
+var audioUnlocked=false;
 function getAudio(){
   if(!audioCtx){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+  // Resume suspended context (browser autoplay policy)
+  if(audioCtx&&audioCtx.state==='suspended'){try{audioCtx.resume();}catch(e){}}
   return audioCtx;
 }
+// Unlock audio on first user gesture so scheduled sounds can play
+function unlockAudio(){
+  if(audioUnlocked)return;
+  audioUnlocked=true;
+  var ac=getAudio();
+  if(!ac)return;
+  // Play a silent buffer to fully unlock
+  try{
+    var buf=ac.createBuffer(1,1,ac.sampleRate);
+    var src=ac.createBufferSource();src.buffer=buf;
+    src.connect(ac.destination);src.start(0);
+  }catch(e){}
+}
+document.addEventListener('click',unlockAudio,{once:true});
+document.addEventListener('touchstart',unlockAudio,{once:true});
+document.addEventListener('keydown',unlockAudio,{once:true});
+// Also attempt unlock immediately — works in some browsers without gesture
+setTimeout(function(){try{var ac=getAudio();if(ac&&ac.state==='suspended')ac.resume();}catch(e){}},50);
 
 // Short transient crack sound: filtered noise burst
 function playCrack(opts){
@@ -722,35 +763,62 @@ function playTinkle(){
   }catch(e){}
 }
 
-// Schedule crack sounds to match visual cracks
+// Schedule crack sounds — one sound fires per visual crack
 function scheduleSounds(){
-  // [time_ms, type, opts]
+  // Aligned to crack delays above: [time_ms, type, opts]
   var sounds=[
-    [100,'crack',{freq:1100,vol:.22,dur:.06,q:3}],
-    [2100,'crack',{freq:850,vol:.25,dur:.08,q:2}],
-    [2180,'tinkle'],
-    [3100,'crack',{freq:950,vol:.2,dur:.07,q:2.5}],
-    [3250,'tinkle'],
-    [4300,'crack',{freq:700,vol:.28,dur:.1,q:2}],
-    [4350,'crack',{freq:1400,vol:.12,dur:.05,q:4}],
-    [5200,'crack',{freq:1200,vol:.15,dur:.05,q:3}],
-    [5900,'crack',{freq:800,vol:.18,dur:.08,q:2}],
-    [5950,'tinkle'],
-    [6600,'crack',{freq:1050,vol:.16,dur:.06,q:3}],
-    [7100,'crack',{freq:900,vol:.2,dur:.07,q:2.5}],
-    [7200,'tinkle'],
-    [7700,'crack',{freq:650,vol:.22,dur:.09,q:2}],
-    [8300,'crack',{freq:1100,vol:.14,dur:.05,q:3.5}],
-    [8700,'crack',{freq:750,vol:.16,dur:.07,q:2}],
-    [8750,'tinkle'],
-    [9000,'crack',{freq:600,vol:.25,dur:.12,q:1.5}],
-    [9300,'crack',{freq:1300,vol:.18,dur:.05,q:4}],
-    [9500,'crack',{freq:850,vol:.22,dur:.08,q:2.5}],
-    [9600,'tinkle'],
-    [9800,'crack',{freq:700,vol:.3,dur:.15,q:1.8}],
-    [9850,'thud',.2],
-    [9950,'thud',.38],
-    [10000,'thud',.55],
+    // crack 1 — main apex split
+    [80,  'crack',{freq:900, vol:.28,dur:.10,q:2}],
+    // crack 2 — branch right
+    [1850,'crack',{freq:750, vol:.32,dur:.12,q:1.8}],
+    [1920,'tinkle'],
+    // crack 3 — branch left
+    [2850,'crack',{freq:820, vol:.28,dur:.10,q:2}],
+    [2920,'tinkle'],
+    // spider upper branches
+    [2050,'crack',{freq:1400,vol:.13,dur:.05,q:4}],
+    [2250,'crack',{freq:1350,vol:.12,dur:.05,q:4}],
+    // crack 4 — diagonal slash L→R
+    [3850,'crack',{freq:680, vol:.30,dur:.13,q:1.6}],
+    // center-left web
+    [3250,'crack',{freq:1200,vol:.14,dur:.05,q:3}],
+    [3450,'tinkle'],
+    // center-right web
+    [2450,'crack',{freq:1250,vol:.13,dur:.05,q:3.5}],
+    [2650,'tinkle'],
+    // crack 5 — diagonal slash R→L
+    [4650,'crack',{freq:700, vol:.28,dur:.12,q:1.8}],
+    // crack 6 — horizontal rift
+    [5450,'crack',{freq:600, vol:.35,dur:.16,q:1.4}],
+    [5520,'tinkle'],
+    // lower center crumble
+    [6250,'crack',{freq:950, vol:.18,dur:.07,q:2.5}],
+    [6450,'crack',{freq:1000,vol:.16,dur:.07,q:2.5}],
+    [6500,'tinkle'],
+    // micro center radiating
+    [7050,'crack',{freq:1300,vol:.14,dur:.05,q:3.5}],
+    [7250,'crack',{freq:1250,vol:.13,dur:.05,q:3.5}],
+    // bottom edge stress
+    [7850,'crack',{freq:800, vol:.18,dur:.07,q:2}],
+    [8050,'crack',{freq:820, vol:.17,dur:.07,q:2}],
+    // near-apex spider
+    [8450,'crack',{freq:1100,vol:.16,dur:.05,q:3}],
+    [8650,'crack',{freq:1150,vol:.15,dur:.05,q:3}],
+    [8700,'tinkle'],
+    // final crumble web
+    [9050,'crack',{freq:700, vol:.22,dur:.10,q:2}],
+    [9150,'crack',{freq:720, vol:.20,dur:.10,q:2}],
+    [9250,'tinkle'],
+    // pre-shatter escalation
+    [9600,'crack',{freq:580, vol:.32,dur:.18,q:1.4}],
+    [9700,'tinkle'],
+    [9750,'crack',{freq:650, vol:.35,dur:.18,q:1.5}],
+    // shatter impact
+    [9900,'thud',.25],
+    [9970,'thud',.42],
+    [10050,'thud',.60],
+    [10100,'tinkle'],
+    [10150,'tinkle'],
   ];
   var timers=[];
   sounds.forEach(function(s){
